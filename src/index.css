@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Customize the built-in light theme with modern colors */
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+
+  /* Primary = Winner */
+  --color-primary: #F59F00;         /* Winner / Primary Button / Logo */
+  --color-primary-focus: #4C6EF5;   /* Hover/focus */
+  --color-primary-content: #FFFFFF; /* Text on primary buttons */
+
+  /* Secondary / Accent */
+  --color-secondary: #37B24D;       /* Accent highlights */
+  --color-secondary-focus: #2F9E44;
+  --color-secondary-content: #FFFFFF;
+
+  /* Background / Neutral */
+  --color-base-100: #FFFFFF;        /* Main background */
+  --color-neutral: #F8F9FA;         /* Cards / sections */
+  --color-base-content: #1F2937;    /* Headings / text */
+
+  /* Status colors */
+  --color-success: #5C7CFA;         /* Winner = primary */
+  --color-warning: #F59F00;
+  --color-error: #F03E3E;
+  --color-info: #22B8CF;
+
+  /* Optional special states */
+  --color-locked: #F03E3E;
+  --color-new: #22B8CF;
+  --color-completed: #6C757D;
+}
+body {
+  font-family: 'Old Standard TT', serif;
+}
