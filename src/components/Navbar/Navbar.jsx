@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router";
+import { useAuth } from "../../hooks/useAuth";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
+  const { user, logoutUser } = useAuth();
+  console.log(user);
+  const handleLogOut = () => {
+    logoutUser().then().catch((error) => {
+      console.error("Logout Error:", error);
+    });
+       
+  };
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Contests", href: "/contests" },
@@ -15,11 +24,8 @@ const Navbar = () => {
   return (
     <nav className="w-full  bg-white shadow-md strick top-0 left-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-
         {/* Logo */}
-        <div className="text-2xl font-bold text-indigo-600">
-          ContestHub
-        </div>
+        <div className="text-2xl font-bold text-indigo-600">ContestHub</div>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-8">
@@ -37,19 +43,25 @@ const Navbar = () => {
 
         {/* Login Button */}
         <div className="hidden md:block">
-          <Link
-            to="/login"
-            className="px-5 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition"
-          >
-            Login
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogOut}
+              className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="px-5 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Icon */}
-        <button
-          className="md:hidden"
-          onClick={() => setOpen(!open)}
-        >
+        <button className="md:hidden" onClick={() => setOpen(!open)}>
           {open ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>

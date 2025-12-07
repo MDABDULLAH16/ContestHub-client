@@ -1,11 +1,17 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import GoogleSignInButton from "../../../components/Buttons/GoogleSignInButton";
+import { useAuth } from "../../../hooks/useAuth";
+import { toast } from "react-toastify";
+import { Link, useLocation } from "react-router";
  // make sure your firebase is initialized here
 
  
 
 const Login = () => {
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+    const { loginUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -15,6 +21,12 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
      
+        await loginUser(data.email, data.password).then(()=>{
+          toast.success("Login successful!");
+          window.location.replace(from);
+        }).catch((error)=>{
+          toast.error(error.message);
+        });
       if (data.remember) {
         localStorage.setItem("rememberMe", data.email);
       } else {
@@ -34,8 +46,8 @@ const Login = () => {
     try {
       
     } catch (error) {
-      console.error(error);
-      alert(error.message);
+     
+      toast.error(error.message);
     }
   };
 
@@ -120,7 +132,8 @@ const Login = () => {
         >
           Login
         </button>
-      </form>
+          </form>
+          <div>register page link <Link to='/register'>Register</Link> </div>
 
       <hr style={{ margin: "20px 0" }} />
 <GoogleSignInButton/>
