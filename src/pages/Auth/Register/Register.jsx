@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/useAuth";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
-import { useAxiosSecure } from "../../../hooks/useAxiosSecure";
+ 
 import { Link } from "react-router";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 // make sure Firebase is initialized
 
 const Register = () => {

@@ -99,15 +99,15 @@ const Navbar = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 flex-shrink-0 group cursor-pointer"
+            className="flex items-center gap-2 shrink-0 group cursor-pointer"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 bg-linear-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
               <Trophy size={24} className="text-white" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hidden sm:inline">
+            <span className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hidden sm:inline">
               ContestHub
             </span>
-            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent sm:hidden">
+            <span className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent sm:hidden">
               CH
             </span>
           </Link>
@@ -136,11 +136,22 @@ const Navbar = () => {
                 {/* User Avatar Button */}
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 transition border border-indigo-200"
+                  className="flex items-center gap-3 px-4 py-2 rounded-lg bg-linear-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 transition border border-indigo-200"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
                     <span className="text-white text-sm font-bold">
-                      {user?.email?.charAt(0).toUpperCase()}
+                      {user?.photoURL ? (
+                        <img
+                          src={user.photoURL}
+                          alt="User Avatar"
+                          referrerPolicy="no-referrer"
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : user?.displayName ? (
+                        user.displayName.charAt(0).toUpperCase()
+                      ) : (
+                        user.email.charAt(0).toUpperCase()
+                      )}
                     </span>
                   </div>
                   <span className="text-sm font-medium text-gray-700 hidden sm:inline">
@@ -221,7 +232,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition font-medium"
+                  className="px-5 py-2 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition font-medium"
                 >
                   Sign Up
                 </Link>
@@ -320,7 +331,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="block px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition font-medium text-center"
+                  className="block px-4 py-2 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition font-medium text-center"
                   onClick={() => setOpen(false)}
                 >
                   Sign Up

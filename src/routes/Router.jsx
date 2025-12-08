@@ -7,10 +7,8 @@ import PrivateRouter from "./PrivateRouter";
 import Contests from './../pages/Contests/Contests';
 import About from "../pages/About/About";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
-import CreatorDashboard from "../pages/Dashboard/CreatorDashboard";
-import UserDashboard from "../pages/Dashboard/UserDashboard";
-import AdminDashboard from "../pages/Dashboard/AdminDashboard";
- 
+import Settings from "../pages/Settings/Settings";
+
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +30,10 @@ export const router = createBrowserRouter([
         Component: About,
       },
       {
+      path:"settings",
+        Component: Settings,
+      },
+      {
       path:"how-it-works",
         Component: HowItWorks,
       },
@@ -45,25 +47,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path:"dashboard",
-    element: <PrivateRouter>
-      {/* Dashboard Layout can be added here */}  
-    </PrivateRouter>,
-    children:[
-      // Dashboard related routes can be added here
-      {
-        path: 'creator',
-        Component: CreatorDashboard,
-      },
-      {
-        path: 'user',
-        Component: UserDashboard,
-      },
-      {
-        path:'admin',
-        Component: AdminDashboard,
-      }
-    ] 
-  }
+  
 ]);
