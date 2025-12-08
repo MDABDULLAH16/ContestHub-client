@@ -63,21 +63,21 @@ const Navbar = () => {
 
   const dashboardLinks = {
     admin: [
-      { name: "Dashboard", href: "/admin/dashboard", icon: BarChart3 },
-      { name: "Manage Users", href: "/admin/users", icon: Users },
-      { name: "Manage Contests", href: "/admin/contests", icon: Trophy },
-      { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+      { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
+      { name: "Manage Users", href: "/users", icon: Users },
+      { name: "Manage Contests", href: "/contests", icon: Trophy },
+      { name: "Analytics", href: "/analytics", icon: BarChart3 },
     ],
     creator: [
-      { name: "My Dashboard", href: "/creator/dashboard", icon: BarChart3 },
-      { name: "Create Contest", href: "/creator/create", icon: Plus },
-      { name: "My Contests", href: "/creator/contests", icon: Trophy },
+      { name: "My Dashboard", href: "/dashboard", icon: BarChart3 },
+      { name: "Create Contest", href: "/create", icon: Plus },
+      { name: "My Contests", href: "/contests", icon: Trophy },
       { name: "Earnings", href: "/creator/earnings", icon: Zap },
     ],
     user: [
-      { name: "My Dashboard", href: "/user/dashboard", icon: BarChart3 },
-      { name: "My Entries", href: "/user/entries", icon: Trophy },
-      { name: "Wishlist", href: "/user/wishlist", icon: User },
+      { name: "My Dashboard", href: "/dashboard", icon: BarChart3 },
+      { name: "My Entries", href: "/entries", icon: Trophy },
+      { name: "Wishlist", href: "/wishlist", icon: User },
     ],
   };
 

@@ -8,6 +8,7 @@ import Contests from './../pages/Contests/Contests';
 import About from "../pages/About/About";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
 import Settings from "../pages/Settings/Settings";
+import DashboardLayout from './../pages/Layout/DashboardLayout/DashboardLayout';
 
 
 export const router = createBrowserRouter([
@@ -47,5 +48,15 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: 'dashboard',
+    element: <PrivateRouter>
+      <DashboardLayout></DashboardLayout>
+    </PrivateRouter>,
+    children: [
+      // Dashboard routes will go here
+
+    ]
+  }  
   
 ]);
