@@ -7,8 +7,11 @@ import PrivateRouter from "./PrivateRouter";
 import Contests from './../pages/Contests/Contests';
 import About from "../pages/About/About";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
-import Settings from "../pages/Settings/Settings";
+ 
 import DashboardLayout from './../pages/Layout/DashboardLayout/DashboardLayout';
+import BeACreator from './../pages/Dashboard/User/BeACreator/BeACreator';
+import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
+import CreatorApply from './../pages/Dashboard/Admin/CreatorApply/CreatorApply';
 
 
 export const router = createBrowserRouter([
@@ -21,42 +24,50 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path:'contests',
-        element: <PrivateRouter>
-          <Contests></Contests>
-        </PrivateRouter>
+        path: "contests",
+        element: (
+          <PrivateRouter>
+            <Contests></Contests>
+          </PrivateRouter>
+        ),
       },
       {
-      path:"about",
+        path: "be-creator",
+        Component: BeACreator,
+      },
+      {
+        path: "about",
         Component: About,
       },
+
       {
-      path:"settings",
-        Component: Settings,
-      },
-      {
-      path:"how-it-works",
+        path: "how-it-works",
         Component: HowItWorks,
       },
       {
-      path:"login",
+        path: "login",
         Component: Login,
       },
       {
-        path:"register",
+        path: "register",
         Component: Register,
       },
     ],
   },
   {
-    path: 'dashboard',
-    element: <PrivateRouter>
-      <DashboardLayout></DashboardLayout>
-    </PrivateRouter>,
+    path: "dashboard",
+    element: (
+      <PrivateRouter>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRouter>
+    ),
     children: [
-      // Dashboard routes will go here
-
-    ]
-  }  
-  
+      { index: true,Component:DashboardHome  },
+      
+      { path: "contests", element: <Contests /> },
+      { path: "creator-apply", element: <CreatorApply /> },
+      // { path: "analytics", element: <Analytics /> },
+     
+    ],
+  },
 ]);

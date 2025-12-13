@@ -3,14 +3,17 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/useAuth";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
- 
-import { Link } from "react-router";
+
+import { Link, useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 // make sure Firebase is initialized
 
 const Register = () => {
   const { createUser } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -44,7 +47,6 @@ const Register = () => {
 
       // Create user in Firebase
       const userCredential = await createUser(data.email, data.password);
-      
 
       // Update user profile
       await updateProfile(userCredential.user, {
@@ -62,7 +64,10 @@ const Register = () => {
         axiosSecure
           .post("/users", dbUser)
           .then((res) => {
-            toast.success(res?.data.message);
+            if (res.data.insertedId) {
+              toast.success("Registration successful!");
+              navigate(from, { replace: true });// Redirect after registration
+            }
           })
           .catch((err) => {
             console.error("Error saving user to DB", err);

@@ -13,9 +13,11 @@ import {
   Zap,
   Users,
   Trophy,
+  Sparkles,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
+import useRole from "./../../hooks/useUserRole";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -24,6 +26,7 @@ const Navbar = () => {
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
   const { user, logoutUser } = useAuth();
+  const { role } = useRole();
 
   // Click outside to close user dropdown
   useEffect(() => {
@@ -37,13 +40,26 @@ const Navbar = () => {
   }, []);
 
   // Get role
-  const userRole = user ? localStorage.getItem("userRole") || "user" : null;
+  const userRole = role;
 
-  const navLinks = [
-    { name: "Home", href: "/", icon: Home },
-    { name: "Contests", href: "/contests", icon: Trophy },
-    { name: "How It Works", href: "/how-it-works", icon: Zap },
-  ];
+  const navLinks = {
+    admin: [
+      { name: "Home", href: "/", icon: Home },
+      { name: "Contests", href: "/contests", icon: Trophy },
+    ],
+    user: [
+      { name: "Home", href: "/", icon: Home },
+      { name: "Contests", href: "/contests", icon: Trophy },
+      { name: "How It Works", href: "/how-it-works", icon: Zap },
+      { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
+    ],
+    creator: [
+      { name: "Home", href: "/", icon: Home },
+      { name: "Create Contest", href: "/create", icon: Plus },
+      { name: "Contests", href: "/contests", icon: Trophy },
+      { name: "How It Works", href: "/how-it-works", icon: Zap },
+    ],
+  };
 
   const dashboardLinks = {
     admin: [
@@ -62,6 +78,7 @@ const Navbar = () => {
       { name: "My Dashboard", href: "/dashboard", icon: BarChart3 },
       { name: "My Entries", href: "/entries", icon: Trophy },
       { name: "Wishlist", href: "/wishlist", icon: User },
+      { name: "Be a Creator", href: "/creator", icon: Sparkles },
     ],
   };
 
@@ -173,9 +190,13 @@ const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => (
+          {/* {navLinks.map((link) => (
             <NavItem key={link.name} link={link} />
-          ))}
+          ))} */}
+          {userRole &&
+            navLinks[userRole].map((link) => (
+              <NavItem key={link.name} link={link} />
+            ))}
         </div>
 
         {/* Desktop Right */}

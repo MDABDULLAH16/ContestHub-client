@@ -3,13 +3,16 @@ import { useEffect } from "react";
 
 import { useNavigate } from "react-router";
 import { useAuth } from "./useAuth";
+ 
 
 const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 const useAxiosSecure = () => {
   const navigate = useNavigate();
-  const { user, logOut } = useAuth();
+  const { user, logoutUser } = useAuth();
+  // console.log(user);
+  
   useEffect(() => {
     const reqInterceptor = axiosSecure.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${user?.accessToken}`;
@@ -25,7 +28,7 @@ const useAxiosSecure = () => {
         console.log(error);
         const statusCode = error.status;
         if (statusCode === 401 || statusCode === 403) {
-          logOut().then(() => {
+          logoutUser().then(() => {
             navigate("/login");
           });
         }
@@ -37,7 +40,7 @@ const useAxiosSecure = () => {
       axiosSecure.interceptors.request.eject(reqInterceptor);
       axiosSecure.interceptors.response.eject(resInterceptor);
     };
-  }, [user, logOut, navigate]);
+  }, [user, logoutUser, navigate]);
   return axiosSecure;
 };
 export default useAxiosSecure;
