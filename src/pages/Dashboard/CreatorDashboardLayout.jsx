@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, NavLink, Outlet } from "react-router";
-import { Plus, Menu, X, Home, Trophy, Wallet, Settings } from "lucide-react";
+import { Plus, Menu, X, Home, Trophy, Wallet, Settings, LayoutDashboard } from "lucide-react";
 
 const CreatorDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
   const navLinks = [
-    { name: "Dashboard", to: "/dashboard/creator", icon: Home },
+    { name: "Go Home", to: "/", icon: Home },
+    { name: "Dashboard", to: "/dashboard/creator", icon: LayoutDashboard },
     {
       name: "My Contests",
       to: "/dashboard/creator/my-created-contests",

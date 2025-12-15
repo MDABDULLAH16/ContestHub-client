@@ -17,6 +17,7 @@ import CreatorDashboard from "../pages/Dashboard/CreatorDashboardLayout";
 import MyCreatedContest from "../pages/Dashboard/Creators/MyCreatedContest/MyCreatedContest";
 import CreatorHome from "../pages/Dashboard/Creators/CreatorHome/CreatorHome";
 import CreateContest from "../pages/Dashboard/Admin/Contests/CreateContest/CreateContest";
+import Settings from "../pages/Settings/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "settings",
+        Component: Settings,
       },
     ],
   },

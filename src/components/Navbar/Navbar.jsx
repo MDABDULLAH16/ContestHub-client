@@ -33,7 +33,11 @@ const NAV_LINKS = {
   ],
   creator: [
     { name: "Home", href: "/", icon: Home },
-    { name: "Create Contest", href: "/create", icon: Plus },
+    {
+      name: "Create Contest",
+      href: "/dashboard/creator/create-contest",
+      icon: Plus,
+    },
     { name: "Contests", href: "/contests", icon: Trophy },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
   ],
@@ -48,7 +52,11 @@ const DASHBOARD_LINKS = {
   ],
   creator: [
     { name: "My Dashboard", href: "/dashboard", icon: BarChart3 },
-    { name: "Create Contest", href: "dashboard/creator/create-contest", icon: Plus },
+    {
+      name: "Create Contest",
+      href: "dashboard/creator/create-contest",
+      icon: Plus,
+    },
     { name: "My Contests", href: "/creator/contests", icon: Trophy },
     { name: "Earnings", href: "/creator/earnings", icon: Zap },
   ],
