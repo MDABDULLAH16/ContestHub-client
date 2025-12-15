@@ -22,7 +22,7 @@ const CreatorApply = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   /* ---------------- FETCH (UI ONLY) ---------------- */
-  const { data: creators = [], isLoading } = useQuery({
+  const { data: creators = [], isLoading ,refetch} = useQuery({
     queryKey: ['creators',],
     queryFn: async () => {
       const res = await axiosSecure.get(`/creators`)
@@ -79,6 +79,7 @@ const handleUpdateStatus = async (status) => {
       timer: 2000,
       showConfirmButton: false,
     });
+    refetch()
   } catch (error) {
     console.error("Update failed:", error);
 
@@ -133,8 +134,8 @@ const handleUpdateStatus = async (status) => {
                   <span
                     className={`${
                       creator.status === "accepted"
-                        ? "badge badge-primary"
-                        : "badge badge-warning font-semibold"
+                        ? "badge badge-primary" : creator.status==='rejected' ?'badge badge-error text-white'
+                        : "badge badge-warning font-semibold text-white"
                     }`}
                   >
                     {creator.status}

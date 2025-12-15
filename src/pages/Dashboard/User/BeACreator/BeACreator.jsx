@@ -1,11 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+ 
 import { Sparkles, Upload, User, Mail, FileText } from "lucide-react";
  
 import { toast } from "react-toastify";
  
-import useAxiosSecure from './../../../../hooks/useAxiosSecure';
+ 
+import { useAuth } from "../../../../hooks/useAuth";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const BeACreator = () => {
   const { user } = useAuth();

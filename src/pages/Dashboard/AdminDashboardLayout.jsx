@@ -22,10 +22,15 @@ const AdminDashboardLayout = () => {
   // Admin links
   const adminLinks = [
     { to: "/", label: "Home", icon: LucideHome },
-    { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/dashboard/admin", label: "Dashboard", icon: LayoutDashboard },
     {
-      to: "/dashboard/creator-apply",
+      to: "/dashboard/admin/creator-apply",
       label: "Creator Management",
+      icon: Users2,
+    },
+    {
+      to: "/dashboard/admin/contests",
+      label: "Contests",
       icon: Users2,
     },
     
@@ -93,7 +98,7 @@ const AdminDashboardLayout = () => {
                     ContestHub
                   </span>
                   <span className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent sm:hidden">
-                    CH
+                    ContestHub
                   </span>
                 </Link>
               </span>

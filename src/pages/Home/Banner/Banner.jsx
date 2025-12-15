@@ -17,7 +17,7 @@ const images = [
 
 const Banner = () => {
   return (
-    <div className="relative w-full h-[80vh] overflow-hidden">
+    <div className="relative w-full h-[50vh] my-6 md:h-[70vh] lg:h-[80vh] overflow-hidden">
       {/* Swiper Slider */}
       <Swiper
         spaceBetween={0}
@@ -26,7 +26,7 @@ const Banner = () => {
         autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         modules={[Autoplay, EffectFade, Pagination]}
-        className="w-full h-full"
+        className="w-full  "
       >
         {images.map((img, i) => (
           <SwiperSlide key={i}>
@@ -34,7 +34,7 @@ const Banner = () => {
               src={img}
               alt="banner slide"
               loading="lazy"
-              className="w-full h-screen object-fill bg-cover bg-center  "
+              className="w-full  object-fill  h-full  "
             />
           </SwiperSlide>
         ))}
