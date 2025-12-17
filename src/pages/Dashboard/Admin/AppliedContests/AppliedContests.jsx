@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
- 
-import Loader from './../../../../components/Loader/Loader';
-import useAxiosSecure from './../../../../hooks/useAxiosSecure';
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "./../../../../components/Loader/Loader";
+import useAxiosSecure from "./../../../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import AppliedContestModal from "./AppliedContestModal";
 
+
 const AppliedContests = () => {
   const axiosSecure = useAxiosSecure();
- const queryClient = useQueryClient();
+
   const [selectedContest, setSelectedContest] = useState(null); // For the details modal
 
   // 1. Fetch Data using TanStack Query
@@ -17,7 +16,8 @@ const AppliedContests = () => {
     data: contests = [],
     isLoading,
     isError,
-    error,
+      error,
+    refetch
   } = useQuery({
     queryKey: ["appliedContests"],
     queryFn: async () => {
@@ -26,15 +26,9 @@ const AppliedContests = () => {
     },
   });
 
- 
- 
+  
 
-  const handleStatusChange = (contest, newStatus) => {
-    mutation.mutate({ id: contest._id, status: newStatus });
-  };
-
-  if (isLoading)
-    return <Loader/>
+  if (isLoading) return <Loader />;
   if (isError)
     return (
       <div className="text-center text-red-500 mt-10">
@@ -167,9 +161,9 @@ const AppliedContests = () => {
       {/* Modal for Details and Approval */}
       {selectedContest && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
-          <AppliedContestModal
+          <AppliedContestModal refetch={refetch}
             setSelectedContest={setSelectedContest}
-            handleStatusChange={handleStatusChange}
+           
             selectedContest={selectedContest}
           ></AppliedContestModal>
         </div>

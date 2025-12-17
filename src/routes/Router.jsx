@@ -19,6 +19,7 @@ import CreatorHome from "../pages/Dashboard/Creators/CreatorHome/CreatorHome";
 import CreateContest from "../pages/Dashboard/Admin/Contests/CreateContest/CreateContest";
 import Settings from "../pages/Settings/Settings";
 import AppliedContests from "../pages/Dashboard/Admin/AppliedContests/AppliedContests";
+import ContestDetails from "../pages/Contests/ContestDetails";
 
 export const router = createBrowserRouter([
   {
@@ -31,11 +32,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "contests",
-        element: (
-          <PrivateRouter>
-            <Contests></Contests>
-          </PrivateRouter>
-        ),
+        element: <Contests></Contests>,
+      },
+      {
+        path: "contest-details/:id",
+        element: <ContestDetails></ContestDetails>,
       },
       {
         path: "be-creator",
@@ -72,8 +73,7 @@ export const router = createBrowserRouter([
       </PrivateRouter>
     ),
     children: [
-    
-    //admin routes
+      //admin routes
       {
         path: "admin",
         Component: DashboardHome,
@@ -91,11 +91,11 @@ export const router = createBrowserRouter([
           {
             path: "my-created-contests",
             Component: MyCreatedContest,
-          },          
+          },
           {
             path: "create-contest",
             Component: CreateContest,
-          },          
+          },
         ],
       },
     ],

@@ -1,10 +1,63 @@
-import React from 'react';
+import React from "react";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
-const AppliedContestModal = ({ 
+const AppliedContestModal = ({
   setSelectedContest,
-  handleStatusChange,
   selectedContest,
+  refetch,
 }) => {
+  const axiosSecure = useAxiosSecure();
+  const handleStatusChange = async (id, status) => {
+    // console.log(id, status); // Good for debugging
+
+    try {
+      const res = await axiosSecure.patch(
+        `/applied-contest/${id}?status=${status}`
+      );
+
+      if (res.data.modifiedCount > 0) {
+        // FIX: Use if/else to prevent double toasts
+        if (status === "rejected") {
+          toast.error(`The contest has been rejected.`);
+        } else {
+          toast.success(`The contest has been ${status}.`);
+        }
+
+        // Refresh the table data
+       refetch();
+       setSelectedContest(null);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status.");
+    }
+  };
+  const handleDeleteContest = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await axiosSecure.delete(`/applied-contest/${id}`);
+        if (res.data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+            refetch()
+            setSelectedContest(null)
+        }
+      }
+    });
+  };
   return (
     <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
       {/* Modal Header */}
@@ -38,46 +91,60 @@ const AppliedContestModal = ({
               {selectedContest.description}
             </p>
           </div>
-          <div className="p-3 bg-gray-100 rounded-lg">
-            <p className="font-semibold text-gray-700 mb-2">
-              Task Instructions
+          {/* 1. Use optional chaining (?.) and check if it exists */}
+          {selectedContest?.taskInstruction &&
+            selectedContest.taskInstruction.trim().length > 0 && (
+              <div className="p-3 bg-gray-100 rounded-lg">
+                <p className="font-semibold text-gray-700 mb-2">
+                  Task Instructions
+                </p>
+
+                <ol className="list-decimal list-inside text-sm text-gray-600 space-y-2">
+                  {/* 2. Use || "" to ensure split() always runs on a string */}
+                  {(selectedContest.taskInstruction || "")
+                    .split("\n")
+                    .map((instruction, index) => {
+                      if (!instruction.trim()) return null;
+
+                      return (
+                        <li key={index} className="leading-relaxed">
+                          {instruction}
+                        </li>
+                      );
+                    })}
+                </ol>
+              </div>
+            )}
+
+          {/* 3. Optional: Show a placeholder if empty */}
+          {!selectedContest?.taskInstruction && (
+            <p className="text-gray-400 italic text-sm">
+              No instructions provided for this contest.
             </p>
-
-            {/* Render as a numbered list */}
-            <ol className="list-decimal list-inside text-sm text-gray-600 space-y-2">
-              {selectedContest.taskInstruction
-                .split("\n")
-                .map((instruction, index) => {
-                  // detailed check to ensure we don't render empty lines
-                  if (!instruction.trim()) return null;
-
-                  return (
-                    <li key={index} className="leading-relaxed">
-                      {instruction}
-                    </li>
-                  );
-                })}
-            </ol>
-          </div>
+          )}
         </div>
 
         {/* Action Buttons inside Modal */}
-        {selectedContest.status === "pending" && (
+       
           <div className="flex justify-end gap-3 mt-6 border-t pt-4">
             <button
-              onClick={() => handleStatusChange(selectedContest, "rejected")}
+              onClick={() => handleDeleteContest(selectedContest._id)}
               className="btn btn-error text-white"
             >
-             Delete
+              Delete
             </button>
             <button
-              onClick={() => handleStatusChange(selectedContest, "rejected")}
+              onClick={() =>
+                handleStatusChange(selectedContest._id, "rejected")
+              }
               className="btn btn-warning text-white"
             >
               Reject Contest
             </button>
             <button
-              onClick={() => handleStatusChange(selectedContest, "accepted")}
+              onClick={() =>
+                handleStatusChange(selectedContest._id, "accepted")
+              }
               className="btn inline-flex items-center gap-2 px-4 py-2
               bg-linear-to-r from-indigo-600 to-purple-600
               text-white rounded-lg text-sm font-medium
@@ -86,7 +153,7 @@ const AppliedContestModal = ({
               Approve Contest
             </button>
           </div>
-        )}
+     
       </div>
     </div>
   );
