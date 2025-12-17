@@ -18,6 +18,7 @@ import MyCreatedContest from "../pages/Dashboard/Creators/MyCreatedContest/MyCre
 import CreatorHome from "../pages/Dashboard/Creators/CreatorHome/CreatorHome";
 import CreateContest from "../pages/Dashboard/Admin/Contests/CreateContest/CreateContest";
 import Settings from "../pages/Settings/Settings";
+import AppliedContests from "../pages/Dashboard/Admin/AppliedContests/AppliedContests";
 
 export const router = createBrowserRouter([
   {
@@ -78,7 +79,7 @@ export const router = createBrowserRouter([
         Component: DashboardHome,
         children: [
           { path: "creator-apply", element: <CreatorApply /> },
-          { path: "contests", element: <Contests /> },
+          { path: "applied-contests", element: <AppliedContests /> },
           //creator
         ],
       },

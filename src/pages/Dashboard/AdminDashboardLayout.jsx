@@ -29,12 +29,10 @@ const AdminDashboardLayout = () => {
       icon: Users2,
     },
     {
-      to: "/dashboard/admin/contests",
-      label: "Contests",
-      icon: Users2,
+      to: "/dashboard/admin/Applied-contests",
+      label: "applied-contests",
+      icon: Trophy,
     },
-    
-    
   ];
 
   return (
