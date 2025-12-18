@@ -20,6 +20,9 @@ import CreateContest from "../pages/Dashboard/Admin/Contests/CreateContest/Creat
 import Settings from "../pages/Settings/Settings";
 import AppliedContests from "../pages/Dashboard/Admin/AppliedContests/AppliedContests";
 import ContestDetails from "../pages/Contests/ContestDetails";
+import PaymentCancelled from "../pages/Payments/PaymentCancelled/PaymentCancelled";
+import PaymentSuccess from "../pages/Payments/PaymentSuccess/PaymentSuccess";
+import Payment from "../pages/Payments/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +65,30 @@ export const router = createBrowserRouter([
       {
         path: "settings",
         Component: Settings,
+      },
+      {
+        path: "payment-success",
+        element: (
+          <PrivateRouter>
+            <PaymentSuccess></PaymentSuccess>
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "payment-cancelled",
+        element: (
+          <PrivateRouter>
+            <PaymentCancelled></PaymentCancelled>
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "payment/:contestId",
+        element: (
+          <PrivateRouter>
+            <Payment></Payment>
+          </PrivateRouter>
+        ),
       },
     ],
   },

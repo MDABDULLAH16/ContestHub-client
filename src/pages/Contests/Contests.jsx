@@ -146,7 +146,7 @@ const Contests = () => {
                   <div className="mt-auto flex items-center justify-between border-t pt-4">
                     <div>
                       <p className="text-xs text-gray-400">Grand Prize</p>
-                      <p className="text-lg font-black text-amber-600">
+                      <p className="text-lg font-bold  bg-linear-to-br from-indigo-500 to-purple-500 text-transparent bg-clip-text">
                         ${contest.prizeMoney}
                       </p>
                     </div>
@@ -154,7 +154,8 @@ const Contests = () => {
                     {/* Dynamic Button */}
                     <Link to={`/contest-details/${contest._id}`}>
                       <button
-                        className={`btn btn-primary btn-md rounded-xl normal-case `}
+                        className={`btn btn-primary btn-md rounded-xl normal-case  bg-linear-to-r from-indigo-600 to-purple-600
+              text-white  `}
                       >
                         See Details
                       </button>
