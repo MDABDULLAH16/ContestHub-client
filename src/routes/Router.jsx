@@ -25,6 +25,7 @@ import PaymentSuccess from "../pages/Payments/PaymentSuccess/PaymentSuccess";
 import Payment from "../pages/Payments/Payment";
 import ContestParticipants from "../pages/Dashboard/Creators/ContestParticipants/ContestParticipants";
 import AllParticipants from "../pages/Dashboard/Creators/AllParticipants/AllParticipants";
+import UserManagement from "../pages/Dashboard/Admin/UserManagement/UserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -113,6 +114,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "creator-apply", element: <CreatorApply /> },
           { path: "applied-contests", element: <AppliedContests /> },
+          { path: "user-management", element: <UserManagement /> },
           //creator
         ],
       },

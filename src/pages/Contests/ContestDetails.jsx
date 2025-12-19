@@ -13,6 +13,7 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../components/Loader/Loader";
 import ParticipantForThisContest from "./ParticipantForThisContest";
+import Swal from "sweetalert2";
 
 const ContestDetails = () => {
   const { id } = useParams();
@@ -31,7 +32,7 @@ const ContestDetails = () => {
 
   // 2. Check registration status
   const { data: registrationStatus, isLoading: regLoading } = useQuery({
-    queryKey: ["registration-check", id, user?.email],
+    queryKey: ["payment-check", id, user?.email],
     enabled: !!user?.email && !!id,
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -40,6 +41,54 @@ const ContestDetails = () => {
       return res.data;
     },
   });
+  const handleSubmitTask = () => {
+    Swal.fire({
+      title: "Submit Your Entry",
+      input: "url",
+      inputLabel: "Please provide your task submission link ensure any one can view/access it.",
+      inputPlaceholder: "https://example.com/your-work",
+      showCancelButton: true,
+      confirmButtonText: "Submit Now",
+      confirmButtonColor: "#22c55e", // Success green
+      inputValidator: (value) => {
+        if (!value) {
+          return "You must provide a link to submit!";
+        }
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const submissionLink = result.value;
+        console.log(submissionLink);
+        
+
+        try {
+          // Update task link and status
+          const res = await axiosSecure.patch(`/submit-task/${id}`, {
+            userEmail: user?.email,
+            task: submissionLink,
+            taskSubmissionStatus: "submitted", // Updating status here
+          });
+
+          if (res.data.modifiedCount > 0) {
+            Swal.fire({
+              icon: "success",
+              title: "Submitted Successfully!",
+              text: "Your task status is now 'submitted'.",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+            // Optional: trigger a refetch if using TanStack Query
+          }
+        } catch (error) {
+          Swal.fire(
+            "Error",
+            "Could not submit task. Try again later.",
+            "error"
+          );
+        }
+      }
+    });
+  };
 
   if (contestLoading || regLoading) return <Loader />;
 
@@ -169,9 +218,9 @@ const ContestDetails = () => {
               </h2>
               <p className="text-green-700 mb-8 max-w-md mx-auto">
                 Excellent! You're officially in the running. Submit your best
-                work to win the <strong>${contest.prizeMoney}</strong> prize!
+                work to win the <strong className="bg-linear-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent">${contest.prizeMoney}</strong> prize!
               </p>
-              <button className="btn btn-lg btn-success text-white px-12 rounded-2xl shadow-xl hover:scale-105 transition-transform">
+              <button onClick={handleSubmitTask} className="btn btn-lg btn-success text-white bg-linear-to-br from-indigo-500 to-purple-500 px-12 rounded-2xl shadow-xl hover:scale-105 transition-transform">
                 Open Submission Portal
               </button>
             </section>
@@ -225,7 +274,7 @@ const ContestDetails = () => {
                 className={`w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 transition-all duration-500 
                   ${
                     hasPaid || isEnded
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                      ? "bg-gray-100  bg-linear-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent cursor-not-allowed border border-gray-200"
                       : "bg-primary text-white hover:bg-blue-700 shadow-[0_10px_30px_-10px_rgba(59,130,246,0.5)] hover:-translate-y-1 active:scale-95"
                   }`}
               >

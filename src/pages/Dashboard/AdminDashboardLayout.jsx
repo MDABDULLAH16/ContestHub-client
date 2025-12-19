@@ -9,10 +9,11 @@ import {
   Bike,
   LogOut,
   Trophy,
+  UserCheck,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import DashboardHeader from "./DashboardHome/DashboardHeader";
-
+import UserManagement from "./Admin/UserManagement/UserManagement";
 
 const AdminDashboardLayout = () => {
   const { logoutUser } = useAuth();
@@ -23,6 +24,11 @@ const AdminDashboardLayout = () => {
   const adminLinks = [
     { to: "/", label: "Home", icon: LucideHome },
     { to: "/dashboard/admin", label: "Dashboard", icon: LayoutDashboard },
+    {
+      to: "/dashboard/admin/user-management",
+      label: "User Management",
+      icon: UserCheck,
+    },
     {
       to: "/dashboard/admin/creator-apply",
       label: "Creator Management",
@@ -66,10 +72,10 @@ const AdminDashboardLayout = () => {
           </label>
           <DashboardHeader />
         </nav>
-
         {/* Page Content */}
         <div className="p-6">
           <Outlet />
+          
         </div>
       </div>
 
@@ -129,7 +135,6 @@ const AdminDashboardLayout = () => {
                 className="flex items-center gap-3 text-error
                 is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="Logout"
-                
               >
                 <LogOut size={20} />
                 <span className="is-drawer-close:hidden">Logout</span>
