@@ -6,8 +6,8 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import Loader from '../../../../components/Loader/Loader';
  
 
-const ContestParticipants = () => {
-  const { id } = useParams(); // Contest ID from URL
+const ContestParticipants = ({ contestId }) => {
+ 
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -15,9 +15,9 @@ const ContestParticipants = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["contest-participants", id],
+    queryKey: ["contest-participants", contestId],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/contest-participants/${id}`);
+      const res = await axiosSecure.get(`/contest-participants/${contestId}`);
       return res.data;
     },
   });
