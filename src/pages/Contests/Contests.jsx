@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Countdown from "react-countdown";
 import { Link } from "react-router";
 import Loader from "../../components/Loader/Loader";
+import { UserRoundCheck } from "lucide-react";
 
 const Contests = () => {
   const axiosSecure = useAxiosSecure();
@@ -20,34 +21,32 @@ const Contests = () => {
       return res.data;
     },
   });
+console.log('c',contests);
 
   // Renderer for Countdown
-  const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-      return <span className="text-red-500 font-bold">Contest Ended</span>;
-    }
-    return (
-      <div className="flex gap-2 text-center items-center">
-        <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs">
-          <span className="block font-bold">{days}d</span>
-        </div>
-        <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs">
-          <span className="block font-bold">{hours}h</span>
-        </div>
-        <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs">
-          <span className="block font-bold">{minutes}m</span>
-        </div>
-        <div className="bg-primary text-white px-2 py-1 rounded text-xs animate-pulse">
-          <span className="block font-bold">{seconds}s</span>
-        </div>
-      </div>
-    );
-  };
+  // const renderer = ({ days, hours, minutes, seconds, completed }) => {
+  //   if (completed) {
+  //     return <span className="text-red-500 font-bold">Contest Ended</span>;
+  //   }
+  //   return (
+  //     <div className="flex gap-2 text-center items-center">
+  //       <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs">
+  //         <span className="block font-bold">{days}d</span>
+  //       </div>
+  //       <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs">
+  //         <span className="block font-bold">{hours}h</span>
+  //       </div>
+  //       <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs">
+  //         <span className="block font-bold">{minutes}m</span>
+  //       </div>
+  //       <div className="bg-primary text-white px-2 py-1 rounded text-xs animate-pulse">
+  //         <span className="block font-bold">{seconds}s</span>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
-  if (isLoading)
-    return (
-      <Loader></Loader>
-    );
+  if (isLoading) return <Loader></Loader>;
 
   if (isError)
     return (
@@ -74,7 +73,7 @@ const Contests = () => {
           </h3>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {contests.map((contest) => {
             const isLive =
               new Date() >= new Date(contest.startDate) &&
@@ -106,8 +105,27 @@ const Contests = () => {
                       {isLive ? "LIVE" : isUpcoming ? "UPCOMING" : "ENDED"}
                     </span>
                   </div>
-                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-sm font-bold shadow-sm">
-                    ${contest.entryPrice} Entry
+                  <div className="absolute bottom-4 left-0 w-full px-4 flex justify-between items-end">
+                    {/* Price Badge - High Contrast to draw the eye */}
+                    <div className="flex flex-col gap-1">
+                      <span className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-lg flex items-center gap-1.5 transition-transform hover:scale-105">
+                        ${contest.entryPrice}
+                        <span className="opacity-80 font-medium">Entry</span>
+                      </span>
+                    </div>
+
+                    {/* Participant Badge - Glassmorphism style */}
+                    <div title="Participants" className="flex items-center gap-1.5 bg-white/80 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full text-gray-800 shadow-sm transition-all hover:bg-white">
+                      <UserRoundCheck size={16} className="text-emerald-600" />
+                      <div className="flex flex-col leading-none">
+                        <span className="text-sm font-bold">
+                          {contest?.participantCount}
+                        </span>
+                        {/* <span className="text-[10px] text-gray-500 uppercase tracking-tight">
+                          Joined
+                        </span> */}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -122,13 +140,13 @@ const Contests = () => {
                     </span>
                   </div>
 
-                  {/* <p className="text-gray-500 text-sm line-clamp-2 mb-2">
+                  <p className="text-gray-500 text-sm line-clamp-2 mb-2">
                     {contest.description}
-                  </p> */}
+                  </p>
 
                   {/* Timer Section */}
 
-                  <div className="mb-4r bg-gray-50 p-3 rounded-xl border border-dashed border-gray-300">
+                  {/* <div className="mb-4r bg-gray-50 p-3 rounded-xl border border-dashed border-gray-300">
                     <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-2">
                       {isUpcoming ? "Starts In:" : "Ends In:"}
                     </p>
@@ -140,7 +158,7 @@ const Contests = () => {
                       }
                       renderer={renderer}
                     />
-                  </div>
+                  </div> */}
 
                   {/* Footer Info */}
                   <div className="mt-auto flex items-center justify-between border-t pt-4">

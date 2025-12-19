@@ -97,11 +97,11 @@ console.log(participants);
                 <td>
                   <span
                     className={`badge ${
-                      p.gradingStatus === "winner"
+                      p.gradingStatus === "Winner"
                         ? "badge-primary text-white"
-                        : p.gradingStatus === "average"
+                        : p.gradingStatus === "Average"
                         ? "badge-warning text-white"
-                        : p.gradingStatus === "rejected"
+                        : p.gradingStatus === "Reject"
                         ? "badge-error text-white"
                         : "badge-ghost"
                     }`}
@@ -113,13 +113,13 @@ console.log(participants);
                   <select
                     className="select select-bordered select-xs"
                     value={p.gradingStatus}
-                    disabled={p.gradingStatus === "winner"} // Optional: lock if winner
+                    disabled={p.gradingStatus === "Winner"} // Optional: lock if winner
                     onChange={(e) => handleGrade(p._id, e.target.value)}
                   >
                     <option value="not_graded">Pending</option>
-                    <option value="🏆 Winner">Mark as Winner</option>
+                    <option value="Winner">Mark as Winner</option>
                     <option value="Average">Average</option>
-                    <option value="rejected">Reject</option>
+                    <option value="Reject">Reject</option>
                   </select>
                 </td>
               </tr>

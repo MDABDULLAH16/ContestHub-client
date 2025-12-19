@@ -13,6 +13,7 @@ const ParticipantForThisContest = ({ id }) => {
       return res.data;
     },
   });
+console.log(participants);
 
   if (isLoading) return <Loader />;
 
@@ -83,7 +84,7 @@ const ParticipantForThisContest = ({ id }) => {
                           {p.userImage ? (
                             <img src={p.userImage} alt={p.userName} />
                           ) : (
-                            <div className="bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-center text-lg font-bold h-full w-full">
+                            <div className="bg-linear-to-br from-primary to-blue-600 text-white flex items-center justify-center text-lg font-bold h-full w-full">
                               {p.userName?.charAt(0)}
                             </div>
                           )}

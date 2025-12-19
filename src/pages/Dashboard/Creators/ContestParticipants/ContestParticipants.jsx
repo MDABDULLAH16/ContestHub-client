@@ -6,8 +6,8 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import Loader from '../../../../components/Loader/Loader';
  
 
-const ContestParticipants = ({ contestId }) => {
- 
+const ContestParticipants = () => {
+  const { id: contestId } = useParams();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -102,9 +102,9 @@ const handleGrade = async (participantId, newStatus) => {
                     onChange={(e) => handleGrade(p._id, e.target.value)}
                   >
                     <option value="not_graded">Pending</option>
-                    <option value="🏆 Winner">Mark as Winner</option>
+                    <option value="Winner">Mark as Winner</option>
                     <option value="Average">Average</option>
-                    <option value="rejected">Reject</option>
+                    <option value="Reject">Reject</option>
                   </select>
                 </td>
               </tr>

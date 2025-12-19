@@ -45,7 +45,7 @@ const NAV_LINKS = {
 
 const DASHBOARD_LINKS = {
   admin: [
-    { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
+    { name: "Dashboard", href: "/dashboard/admin", icon: BarChart3 },
     { name: "Manage Users", href: "/users", icon: Users },
     { name: "Manage Contests", href: "/contests", icon: Trophy },
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
@@ -61,7 +61,7 @@ const DASHBOARD_LINKS = {
     { name: "Earnings", href: "/creator/earnings", icon: Zap },
   ],
   user: [
-    { name: "My Dashboard", href: "/dashboard", icon: BarChart3 },
+    { name: "My Dashboard", href: "/dashboard/user", icon: BarChart3 },
     { name: "My Entries", href: "/entries", icon: Trophy },
     { name: "Wishlist", href: "/wishlist", icon: User },
     { name: "Be a Creator", href: "/creator", icon: Sparkles },
