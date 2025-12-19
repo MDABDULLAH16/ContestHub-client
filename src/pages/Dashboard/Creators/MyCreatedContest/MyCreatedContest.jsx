@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useAuth } from "../../../../hooks/useAuth";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Link } from "react-router";
 
 const MyCreatedContest = () => {
   const { user } = useAuth();
@@ -88,8 +89,6 @@ const MyCreatedContest = () => {
 
   return (
     <div className="p-4">
-      <StatsCreators />
-
       <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mt-8">
         <div className="p-6 bg-gray-50 border-b border-gray-200">
           <h2 className="text-xl font-bold text-gray-800">
@@ -146,9 +145,16 @@ const MyCreatedContest = () => {
                         </button>
                       </div>
                     ) : (
-                      <button className="btn btn-sm btn-disabled">
-                        Locked
-                      </button>
+                      <div className="flex justify-center gap-2">
+                        <button className="btn btn-sm btn-disabled">
+                          Locked
+                        </button>
+                        <Link to={`/dashboard/creator/contest-participants/${contest._id}`}>
+                          <button className="btn btn-sm btn-info text-white">
+                            See Participants
+                          </button>
+                        </Link>
+                      </div>
                     )}
                   </td>
                 </tr>

@@ -30,6 +30,7 @@ const PaymentSuccess = () => {
   }, [sessionId, axiosSecure]);
 
   if (loading) return <Loader />;
+console.log(paymentDetails);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -59,7 +60,7 @@ const PaymentSuccess = () => {
             <div className="flex justify-between">
               <span className="text-gray-500">Amount Paid:</span>
               <span className="font-bold text-gray-900">
-                ${(paymentDetails?.amount_total / 100).toFixed(2)}
+                ${parseInt((paymentDetails?.amount_total / 100).toFixed(2))}
               </span>
             </div>
             <div className="flex justify-between">
@@ -70,7 +71,7 @@ const PaymentSuccess = () => {
 
           <div className="mt-8 space-y-3">
             <Link
-              to="/dashboard/my-participated-contests"
+              to={`/contest-details/${paymentDetails.contestId}`}
               className="btn btn-primary w-full"
             >
               View My Contests

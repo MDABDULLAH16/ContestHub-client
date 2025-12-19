@@ -112,7 +112,7 @@ const ContestDetails = () => {
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-6">
           <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
-            {contest.name}
+            {contest?.name}
           </h1>
           <div className="flex items-center gap-4 bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10">
             <FaClock className="text-yellow-400 animate-pulse" />
@@ -180,7 +180,7 @@ const ContestDetails = () => {
                   Prize Pool
                 </p>
                 <p className="text-4xl font-black text-amber-500 flex items-center gap-2">
-                  <FaTrophy className="text-2xl" /> ${contest.prizeMoney}
+                  <FaTrophy className="text-2xl" /> ${contest?.prizeMoney}
                 </p>
               </div>
               <div className="text-right">
@@ -188,7 +188,7 @@ const ContestDetails = () => {
                   Entry Fee
                 </p>
                 <p className="text-2xl font-bold text-gray-800">
-                  ${contest.entryPrice}
+                  ${contest?.entryPrice}
                 </p>
               </div>
             </div>

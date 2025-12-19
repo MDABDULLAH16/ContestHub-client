@@ -23,6 +23,8 @@ import ContestDetails from "../pages/Contests/ContestDetails";
 import PaymentCancelled from "../pages/Payments/PaymentCancelled/PaymentCancelled";
 import PaymentSuccess from "../pages/Payments/PaymentSuccess/PaymentSuccess";
 import Payment from "../pages/Payments/Payment";
+import ContestParticipants from "../pages/Dashboard/Creators/ContestParticipants/ContestParticipants";
+import AllParticipants from "../pages/Dashboard/Creators/AllParticipants/AllParticipants";
 
 export const router = createBrowserRouter([
   {
@@ -122,6 +124,14 @@ export const router = createBrowserRouter([
           {
             path: "create-contest",
             Component: CreateContest,
+          },
+          {
+            path: "contest-participants/:id",
+            Component: ContestParticipants,
+          },
+          {
+            path: "all-participants",
+            Component: AllParticipants,
           },
         ],
       },

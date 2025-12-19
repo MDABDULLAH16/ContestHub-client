@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { Plus, Menu, X, Home, Trophy, Wallet, Settings, LayoutDashboard } from "lucide-react";
+import StatsCreators from "./Creators/StatsCreators/StatsCreators";
 
 const CreatorDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -14,7 +15,11 @@ const CreatorDashboard = () => {
       to: "/dashboard/creator/my-created-contests",
       icon: Trophy,
     },
-    { name: "Earnings", to: "/creator/earnings", icon: Wallet },
+    {
+      name: "All Participants",
+      to: "/dashboard/creator/all-participants",
+      icon: Wallet,
+    },
     { name: "Settings", to: "/settings", icon: Settings },
   ];
 
@@ -64,6 +69,7 @@ const CreatorDashboard = () => {
         <nav className="p-4 space-y-2">
           {navLinks.map(({ name, to, icon: Icon }) => (
             <NavLink
+              end={true}
               key={name}
               to={to}
               onClick={() => setSidebarOpen(false)}
@@ -124,7 +130,7 @@ const CreatorDashboard = () => {
             </Link>
           </div>
         </header>
-
+         
         {/* ================= Page Content ================= */}
         <main className="p-4 sm:p-6">
           <Outlet />
