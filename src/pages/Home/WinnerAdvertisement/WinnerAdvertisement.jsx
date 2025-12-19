@@ -23,7 +23,7 @@ const WinnerSection = () => {
     }
   
   return (
-    <section className="py-20 bg-linear-to-br from-indigo-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
+    <section className="py-20 my-12 bg-linear-to-br from-indigo-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
       <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -81,7 +81,7 @@ const WinnerSection = () => {
               </div>
             </div>
 
-            <Link to={`/contests`} className="btn w-fit btn-warning btn-lg rounded-full px-8 shadow-[0_0_30px_-5px_rgba(250,204,21,0.5)] border-none text-indigo-900 font-bold hover:scale-105 transition-transform">
+            <Link to={`/contests`} className="btn w-fit  text-white btn-lg rounded-full px-8 shadow- bg-linear-to-br from-indigo-400 to-purple-500  border-none   font-bold hover:scale-105 transition-transform">
               Join the Next Contest
             </Link>
           </div>
@@ -95,7 +95,7 @@ const WinnerSection = () => {
                   <div
                     key={winner._id}
                     className={`flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-xl transform transition-all hover:-translate-y-1 hover:bg-white/20
-                    ${idx === 1 ? "lg:translate-x-12" : ""}`}
+                    ${idx === 1 ? "lg:translate-x-6" : ""}`}
                   >
                     <div className="avatar">
                       <div className="w-16 h-16 rounded-full ring-2 ring-yellow-400 ring-offset-2 ring-offset-purple-900">
