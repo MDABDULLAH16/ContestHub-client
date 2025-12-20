@@ -27,6 +27,7 @@ import ContestParticipants from "../pages/Dashboard/Creators/ContestParticipants
 import AllParticipants from "../pages/Dashboard/Creators/AllParticipants/AllParticipants";
 import UserManagement from "../pages/Dashboard/Admin/UserManagement/UserManagement";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
+import Profile from "../pages/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path: "settings",
         Component: Settings,
+      },
+      {
+        path: "profile",
+        Component: Profile,
       },
       {
         path: "leaderboard",

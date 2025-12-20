@@ -50,9 +50,13 @@ const NAV_LINKS = {
 const DASHBOARD_LINKS = {
   admin: [
     { name: "Dashboard", href: "/dashboard/admin", icon: BarChart3 },
-    { name: "Manage Users", href: "/dashboard/admin/user-management", icon: Users },
+    {
+      name: "Manage Users",
+      href: "/dashboard/admin/user-management",
+      icon: Users,
+    },
     { name: "Manage Contests", href: "/contests", icon: Trophy },
-   {name:"Profile", href:"/dashboard/admin/profile", icon:User},
+    { name: "Profile", href: "/profile", icon: User },
   ],
   creator: [
     { name: "My Dashboard", href: "/dashboard/creator", icon: BarChart3 },
@@ -61,14 +65,19 @@ const DASHBOARD_LINKS = {
       href: "dashboard/creator/create-contest",
       icon: Plus,
     },
-    { name: "My Contests", href: "dashboard/creator/my-created-contests", icon: Trophy },
- 
+    {
+      name: "My Contests",
+      href: "dashboard/creator/my-created-contests",
+      icon: Trophy,
+    },
+    { name: "Profile", href: "/profile", icon: User },
   ],
   user: [
     { name: "My Dashboard", href: "/dashboard/user", icon: BarChart3 },
     { name: "My Entries", href: "/entries", icon: Trophy },
     { name: "Wishlist", href: "/wishlist", icon: User },
     { name: "Be a Creator", href: "/creator", icon: Sparkles },
+    { name: "Profile", href: "/profile", icon: User },
   ],
 };
 

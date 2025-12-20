@@ -58,7 +58,7 @@ const ContestCard = ({ contest, isLive, isUpcoming }) => {
         {/* Content Section */}
         <div className="p-4 grow flex flex-col">
           <div className="flex justify-between items-start ">
-            <h3 className="text-xl mb-2 font-bold text-gray-800 line-clamp-1">
+            <h3 title={contest.name} className="text-xl mb-2 font-bold text-gray-800 line-clamp-1">
               {contest.name}
             </h3>
             <span className="text-xs font-semibold bg-gray-100 px-2 py-1 rounded uppercase">
@@ -84,7 +84,7 @@ const ContestCard = ({ contest, isLive, isUpcoming }) => {
                 className={`btn btn-primary btn-md rounded-xl normal-case  bg-linear-to-r from-indigo-600 to-purple-600
               text-white  `}
               >
-                See Details
+                 Details
               </button>
             </Link>
           </div>
