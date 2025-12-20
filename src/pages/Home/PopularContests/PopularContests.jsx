@@ -44,7 +44,7 @@ const PopularContests = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {popularContests.map((contest) => {
           const isLive =
             new Date() >= new Date(contest.startDate) &&
@@ -107,7 +107,7 @@ const PopularContests = () => {
                     to={`contest-details/${contest._id}`}
                     className="w-fit py-2.5 bg-linear-to-br from-indigo-500 to-purple-500 text-white rounded-xl font-medium hover:bg-indigo-500 px-2 transition-colors"
                   >
-                    View Details
+                   Details
                   </Link>
                 </div>
               </div>

@@ -35,12 +35,12 @@ console.log(paymentDetails);
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-success p-8 text-center">
+        <div className="bg-linear-to-br from-indigo-600 to-purple-600 p-8 text-center">
           <div className="flex justify-center mb-4">
             <CheckCircleIcon className="h-16 w-16 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white">Payment Received!</h1>
-          <p className="text-success-content opacity-90">
+          <p className="text-white opacity-90">
             Thank you for joining the contest.
           </p>
         </div>
@@ -65,14 +65,19 @@ console.log(paymentDetails);
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Status:</span>
-              <span className="badge badge-success badge-sm">Success</span>
+              <span className="badge badge-primary text-white badge-sm">
+                Success
+              </span>
             </div>
           </div>
 
           <div className="mt-8 space-y-3">
             <Link
               to={`/contest-details/${paymentDetails.contestId}`}
-              className="btn btn-primary w-full"
+              className="inline-flex items-center gap-2 px-4 py-2
+              bg-linear-to-r from-indigo-600 to-purple-600
+              text-white rounded-lg text-sm font-medium
+              hover:shadow-lg transition btn w-full justify-center"
             >
               View My Contests
             </Link>

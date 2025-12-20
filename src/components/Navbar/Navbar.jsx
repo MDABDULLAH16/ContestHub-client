@@ -14,6 +14,7 @@ import {
   Users,
   Trophy,
   Sparkles,
+  ListOrdered,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
@@ -23,11 +24,13 @@ import useRole from "../../hooks/useUserRole";
 const NAV_LINKS = {
   admin: [
     { name: "Home", href: "/", icon: Home },
+    { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "Contests", href: "/contests", icon: Trophy },
   ],
   user: [
     { name: "Home", href: "/", icon: Home },
     { name: "Contests", href: "/contests", icon: Trophy },
+    { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
     { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
   ],
@@ -39,6 +42,7 @@ const NAV_LINKS = {
       icon: Plus,
     },
     { name: "Contests", href: "/contests", icon: Trophy },
+    { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
   ],
 };
@@ -46,9 +50,9 @@ const NAV_LINKS = {
 const DASHBOARD_LINKS = {
   admin: [
     { name: "Dashboard", href: "/dashboard/admin", icon: BarChart3 },
-    { name: "Manage Users", href: "/users", icon: Users },
+    { name: "Manage Users", href: "/dashboard/admin/user-management", icon: Users },
     { name: "Manage Contests", href: "/contests", icon: Trophy },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
+   {name:"Profile", href:"/dashboard/admin/profile", icon:User},
   ],
   creator: [
     { name: "My Dashboard", href: "/dashboard/creator", icon: BarChart3 },
@@ -57,8 +61,8 @@ const DASHBOARD_LINKS = {
       href: "dashboard/creator/create-contest",
       icon: Plus,
     },
-    { name: "My Contests", href: "/creator/contests", icon: Trophy },
-    { name: "Earnings", href: "/creator/earnings", icon: Zap },
+    { name: "My Contests", href: "dashboard/creator/my-created-contests", icon: Trophy },
+ 
   ],
   user: [
     { name: "My Dashboard", href: "/dashboard/user", icon: BarChart3 },
