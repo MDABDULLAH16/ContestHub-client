@@ -11,12 +11,12 @@ const CreatorDashboard = () => {
     { name: "Go Home", to: "/", icon: Home },
     { name: "Dashboard", to: "/dashboard/creator", icon: LayoutDashboard },
     {
-      name: "My Contests",
+      name: "My Created Contests",
       to: "/dashboard/creator/my-created-contests",
       icon: Trophy,
     },
     {
-      name: "All Participants",
+      name: "All Submissions",
       to: "/dashboard/creator/all-participants",
       icon: Wallet,
     },
@@ -100,7 +100,7 @@ const CreatorDashboard = () => {
       <div className="flex-1">
         {/* ================= Header ================= */}
         <header className="sticky top-0 z-30 bg-white border-b">
-          <div className="flex items-center justify-between px-4 sm:px-6 h-16">
+          <div className="flex items-center justify-between w-full px-4 sm:px-6 h-16">
             <div className="flex items-center gap-3">
               {/* Toggle Button (All Devices) */}
               <button onClick={() => setSidebarOpen(!sidebarOpen)}>

@@ -99,7 +99,7 @@ const WinnerSection = () => {
                   >
                     <div className="avatar">
                       <div className="w-16 h-16 rounded-full ring-2 ring-yellow-400 ring-offset-2 ring-offset-purple-900">
-                        <img src={winner.userImage} alt={winner.userName} />
+                        <img src={winner.userImage} alt={winner.userName} referrerPolicy="no-referrer" />
                       </div>
                     </div>
                     <div className="flex-1">
