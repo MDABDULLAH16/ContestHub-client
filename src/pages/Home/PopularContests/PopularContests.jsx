@@ -63,7 +63,7 @@ const PopularContests = () => {
           return (
             <div
               key={contest._id}
-              className="group relative bg-base-100 dark:bg-slate-900 rounded-4xl border border-base-300 dark:border-slate-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover:-translate-y-2"
+              className="group relative bg-base-100 dark:bg-slate-900 rounded-2xl border border-base-300 dark:border-slate-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover:-translate-y-2"
             >
               {/* Image Container with Badges */}
               <div className="relative h-56 overflow-hidden">

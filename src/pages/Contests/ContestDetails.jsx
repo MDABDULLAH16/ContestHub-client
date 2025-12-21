@@ -9,6 +9,8 @@ import {
   FaClock,
   FaCheckCircle,
   FaCloudUploadAlt,
+  FaInfoCircle,
+  FaLightbulb,
 } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../components/Loader/Loader";
@@ -21,7 +23,6 @@ const ContestDetails = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
-  // 1. Fetch Contest Data
   const { data: contest, isLoading: contestLoading } = useQuery({
     queryKey: ["contests", id],
     queryFn: async () => {
@@ -30,7 +31,6 @@ const ContestDetails = () => {
     },
   });
 
-  // 2. Check registration status
   const { data: registrationStatus, isLoading: regLoading } = useQuery({
     queryKey: ["payment-check", id, user?.email],
     enabled: !!user?.email && !!id,
@@ -41,50 +41,39 @@ const ContestDetails = () => {
       return res.data;
     },
   });
+
   const handleSubmitTask = () => {
     Swal.fire({
       title: "Submit Your Entry",
       input: "url",
-      inputLabel: "Please provide your task submission link ensure any one can view/access it.",
+      inputLabel: "Please provide your task submission link.",
       inputPlaceholder: "https://example.com/your-work",
       showCancelButton: true,
       confirmButtonText: "Submit Now",
-      confirmButtonColor: "#22c55e", // Success green
-      inputValidator: (value) => {
-        if (!value) {
-          return "You must provide a link to submit!";
-        }
-      },
+      background:
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "#1e293b"
+          : "#fff",
+      color:
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "#fff"
+          : "#000",
+      confirmButtonColor: "#6366f1",
     }).then(async (result) => {
       if (result.isConfirmed) {
         const submissionLink = result.value;
-        console.log(submissionLink);
-        
-
         try {
-          // Update task link and status
           const res = await axiosSecure.patch(`/submit-task/${id}`, {
             userEmail: user?.email,
             task: submissionLink,
-            taskSubmissionStatus: "submitted", // Updating status here
+            taskSubmissionStatus: "submitted",
           });
 
           if (res.data.modifiedCount > 0) {
-            Swal.fire({
-              icon: "success",
-              title: "Submitted Successfully!",
-              text: "Your task status is now 'submitted'.",
-              timer: 2000,
-              showConfirmButton: false,
-            });
-            // Optional: trigger a refetch if using TanStack Query
+            Swal.fire({ icon: "success", title: "Submitted Successfully!" });
           }
         } catch (error) {
-          Swal.fire(
-            "Error",
-            "Could not submit task. Try again later.",
-            "error"
-          );
+          Swal.fire("Error", "Could not submit task.", "error");
         }
       }
     });
@@ -97,169 +86,173 @@ const ContestDetails = () => {
   const startDate = new Date(contest?.startDate);
   const endDate = new Date(contest?.endDate);
 
-  const isLive = now >= startDate && now <= endDate;
   const isUpcoming = now < startDate;
   const isEnded = now > endDate;
 
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
+    if (completed)
       return (
-        <span className="text-red-500 font-bold uppercase tracking-widest">
-          Contest Ended
+        <span className="text-error font-bold tracking-widest uppercase">
+          Ended
         </span>
       );
-    }
     return (
-      <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex items-center gap-3">
         {[
-          { v: days, l: "Days" },
-          { v: hours, l: "Hours" },
-          { v: minutes, l: "Mins" },
+          { v: days, l: "D" },
+          { v: hours, l: "H" },
+          { v: minutes, l: "M" },
+          { v: seconds, l: "S", pulse: true },
         ].map((item, idx) => (
-          <React.Fragment key={idx}>
-            <div className="flex flex-col items-center">
-              <span className="text-xl md:text-3xl font-black">{item.v}</span>
-              <span className="text-[10px] uppercase font-bold text-gray-400">
-                {item.l}
-              </span>
-            </div>
-            <span className="text-gray-500 font-bold text-xl mb-4">:</span>
-          </React.Fragment>
+          <div key={idx} className="flex flex-col items-center">
+            <span
+              className={`text-2xl md:text-3xl font-black ${
+                item.pulse
+                  ? "text-white animate-pulse"
+                  : "text-base-content"
+              }`}
+            >
+              {item.v.toString().padStart(2, "0")}
+            </span>
+            <span className="text-[10px] opacity-50 font-bold uppercase">
+              {item.l}
+            </span>
+          </div>
         ))}
-        <div className="flex flex-col items-center">
-          <span className="text-xl md:text-3xl font-black text-primary animate-pulse">
-            {seconds}
-          </span>
-          <span className="text-[10px] uppercase font-bold text-gray-400">
-            Secs
-          </span>
-        </div>
       </div>
     );
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 animate-fadeIn">
-      {/* Hero Image Section */}
-      <div className="relative rounded-3xl overflow-hidden bg-gray-900 h-[400px] mb-12 group shadow-2xl">
+    <div className="max-w-7xl mx-auto px-4 py-10 transition-colors duration-500">
+      {/* --- HERO SECTION --- */}
+      <div className="relative rounded-[2.5rem] overflow-hidden bg-slate-900 h-[350px] md:h-[450px] mb-12 shadow-2xl border border-white/10">
         <img
           src={contest?.image}
           alt={contest?.name}
-          className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+          className="w-full h-full object-cover opacity-40 transition-transform duration-1000 hover:scale-105"
         />
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-6 bg-linear-to-t from-black/80 via-transparent to-transparent">
-          <h1 className="text-4xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-transparent to-black/20" />
+
+        <div className="absolute inset-0 flex flex-col justify-center items-center p-6 text-center">
+          <div className="badge badge-primary text-white badge-outline mb-4 px-4 py-3 uppercase tracking-widest font-bold">
+            {contest?.contestType || "Official Contest"}
+          </div>
+          <h1 className="text-4xl md:text-7xl font-black mb-6 text-white tracking-tight drop-shadow-2xl">
             {contest?.name}
           </h1>
-          <div className="flex items-center gap-4 bg-black/40 backdrop-blur-xl px-8 py-4 rounded-3xl border border-white/20 shadow-2xl">
-            <FaClock className="text-yellow-400 text-2xl animate-spin-slow" />
+
+          <div className="bg-linear-to-br from-indigo-500 to-purple-600 text-white  backdrop-blur-xl px-6 py-4 rounded-2xl border border-white/10 shadow-2xl flex items-center gap-6">
+            <FaClock className="text-white text-3xl" />
             <div className="text-left">
-              <span className="text-xs uppercase font-black text-gray-300 block">
-                {isUpcoming ? "Registration Countdown" : "Submission Deadline"}
-              </span>
-              <div className="font-mono">
-                <Countdown
-                  date={isUpcoming ? startDate : endDate}
-                  renderer={renderer}
-                />
-              </div>
+              <p className="text-[10px] text-white opacity-60 uppercase tracking-widest">
+                {isUpcoming ? "Registration opens in" : "Submission Deadline"}
+              </p>
+              <Countdown
+                date={isUpcoming ? startDate : endDate}
+                renderer={renderer}
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Left Content Column */}
-        <div className="lg:col-span-2 space-y-10">
-          <section className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
-            <h2 className="text-3xl font-black mb-6 text-gray-800 flex items-center gap-3">
-              About the Challenge
+        {/* --- LEFT COLUMN --- */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* About Section */}
+          <section className="bg-base-100 border border-base-300 p-8 md:p-10 rounded-[2.5rem] shadow-sm">
+            <h2 className="text-2xl font-black mb-6 flex items-center gap-3">
+              <FaInfoCircle className="text-indigo-500" /> About the Challenge
             </h2>
-            <p className="text-gray-600 leading-relaxed text-lg whitespace-pre-line italic">
+            <p className="text-base-content/70 leading-relaxed text-lg whitespace-pre-line italic border-l-4 border-indigo-500 pl-6">
               "{contest.description}"
             </p>
           </section>
 
-          <section className="bg-blue-50 p-10 rounded-[2.5rem] border border-blue-100 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 opacity-10 text-blue-900 text-9xl font-black">
-              ?
-            </div>
-            <h2 className="text-3xl font-black mb-6 text-blue-900">
+          {/* Instructions Section */}
+          <section className="bg-indigo-500/5 border border-indigo-500/20 p-8 md:p-10 rounded-[2.5rem] relative overflow-hidden">
+            <FaLightbulb className="absolute -top-4 -right-4 text-9xl opacity-5 text-indigo-500 rotate-12" />
+            <h2 className="text-2xl font-black mb-8 text-indigo-500 flex items-center gap-3">
               Task Instructions
             </h2>
-            <ul className="space-y-4">
+            <div className="grid gap-4">
               {contest.taskInstruction?.split("\n").map(
                 (step, i) =>
                   step.trim() && (
-                    <li
+                    <div
                       key={i}
-                      className="flex gap-4 items-start bg-white/50 p-4 rounded-2xl border border-blue-100"
+                      className="flex gap-4 items-start bg-base-100 dark:bg-slate-800/50 p-5 rounded-2xl border border-base-300 dark:border-slate-700 hover:border-indigo-500 transition-colors"
                     >
-                      <span className="flex-none w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                      <span className="flex-none w-8 h-8 rounded-xl bg-linear-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center font-bold shadow-lg">
                         {i + 1}
                       </span>
-                      <span className="text-blue-900 font-medium leading-relaxed">
+                      <p className="text-base-content opacity-80 font-medium pt-1">
                         {step}
-                      </span>
-                    </li>
+                      </p>
+                    </div>
                   )
               )}
-            </ul>
+            </div>
           </section>
 
-          {/* User Specific Submission Area */}
-          {hasPaid && isLive && (
-            <section className="bg-linear-to-br from-green-50 to-emerald-50 p-10 rounded-[2.5rem] border-2 border-dashed border-green-200 text-center shadow-inner">
-              <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
-                <FaCloudUploadAlt className="text-4xl text-green-500" />
+          {/* Active Submission Portal */}
+          {hasPaid && !isEnded && (
+            <section className="bg-linear-to-br from-indigo-500/10 to-purple-500/10 p-10 rounded-[2.5rem] border-2 border-dashed border-indigo-500/30 text-center animate-pulse-slow">
+              <div className="bg-base-100 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl border border-base-300">
+                <FaCloudUploadAlt className="text-4xl text-indigo-500" />
               </div>
-              <h2 className="text-3xl font-black text-green-900 mb-3">
-                Participation Active
-              </h2>
-              <p className="text-green-700 mb-8 max-w-md mx-auto">
-                Excellent! You're officially in the running. Submit your best
-                work to win the <strong className="bg-linear-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent">${contest.prizeMoney}</strong> prize!
+              <h2 className="text-3xl font-black mb-3">Participation Active</h2>
+              <p className="opacity-70 mb-8 max-w-sm mx-auto">
+                Submit your entry link below to claim your spot on the
+                leaderboard.
               </p>
-              <button onClick={handleSubmitTask} className="btn btn-lg btn-success text-white bg-linear-to-br from-indigo-500 to-purple-500 px-12 rounded-2xl shadow-xl hover:scale-105 transition-transform">
-                Open Submission Portal
+              <button
+                onClick={handleSubmitTask}
+                className="btn btn-lg bg-linear-to-r from-indigo-500 to-purple-600 border-none text-white px-10 rounded-2xl shadow-xl hover:scale-105 transition-all"
+              >
+                Submit Entry Now
               </button>
             </section>
           )}
         </div>
 
-        {/* Right Action Sidebar */}
+        {/* --- RIGHT SIDEBAR --- */}
         <div className="lg:col-span-1">
-          <aside className="bg-white p-8 rounded-[2.5rem] shadow-2xl border border-gray-100 sticky top-24">
-            <div className="space-y-8">
-              <div className="flex justify-between items-center p-6 bg-amber-50 rounded-3xl border border-amber-100">
-                <div>
-                  <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">
-                    Grand Prize
-                  </p>
-                  <p className="text-4xl font-black text-amber-500 flex items-center gap-2">
-                    <FaTrophy /> ${contest?.prizeMoney}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                    Cost to Enter
-                  </p>
-                  <p className="text-2xl font-bold text-gray-800">
-                    ${contest?.entryPrice}
-                  </p>
+          <aside className="sticky top-24 space-y-6">
+            <div className="bg-base-100 border border-base-300 p-8 rounded-[2.5rem] shadow-xl">
+              {/* Prize Pool Box */}
+              <div className="bg-base-200 dark:bg-slate-800 p-6 rounded-3xl border border-base-300 mb-8 text-center">
+                <p className="text-[10px] font-black opacity-50 uppercase tracking-[0.2em] mb-2">
+                  Grand Prize Pool
+                </p>
+                <div className="text-5xl font-black bg-linear-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent flex justify-center items-center gap-3">
+                  <FaTrophy className="text-indigo-500 text-3xl" /> $
+                  {contest?.prizeMoney}
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm font-bold p-2">
-                  <span className="text-gray-400">Total Participants</span>
-                  <span className="text-gray-800">
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between items-center px-2">
+                  <span className="opacity-50 text-sm font-bold uppercase">
+                    Entry Fee
+                  </span>
+                  <span className="text-xl font-black">
+                    ${contest?.entryPrice}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center px-2">
+                  <span className="opacity-50 text-sm font-bold uppercase">
+                    Participants
+                  </span>
+                  <span className="text-xl font-black">
                     {contest?.participantCount || 0}
                   </span>
                 </div>
+
                 {hasPaid && (
-                  <div className="flex items-center gap-2 text-green-600 bg-green-50 p-4 rounded-2xl font-black text-sm border border-green-100">
-                    <FaCheckCircle className="text-lg" /> Registered & Verified
+                  <div className="flex items-center gap-3 text-emerald-500 bg-emerald-500/10 p-4 rounded-2xl font-bold text-sm border border-emerald-500/20">
+                    <FaCheckCircle className="text-xl" /> Slot Confirmed
                   </div>
                 )}
               </div>
@@ -271,36 +264,35 @@ const ContestDetails = () => {
                     state: { price: contest.entryPrice, title: contest.name },
                   })
                 }
-                className={`w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 transition-all duration-500 
+                className={`w-full py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 transition-all duration-300 
                   ${
                     hasPaid || isEnded
-                      ? "bg-gray-100  bg-linear-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent cursor-not-allowed border border-gray-200"
-                      : "bg-primary text-white hover:bg-blue-700 shadow-[0_10px_30px_-10px_rgba(59,130,246,0.5)] hover:-translate-y-1 active:scale-95"
+                      ? "bg-base-200 opacity-50 cursor-not-allowed border border-base-300"
+                      : "bg-linear-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:-translate-y-1 active:scale-95"
                   }`}
               >
                 {hasPaid ? (
-                  "You're in the list!"
+                  "Already Joined"
                 ) : isEnded ? (
-                  "Challenge Closed"
+                  "Contest Closed"
                 ) : (
                   <>
-                    {" "}
-                    <FaTicketAlt className="animate-bounce" />{" "}
-                    {isUpcoming ? "Pre-Register" : "Join Contest"}{" "}
+                    <FaTicketAlt /> Join Contest
                   </>
                 )}
               </button>
+            </div>
 
-              <div className="p-4 bg-gray-50 rounded-2xl text-[10px] text-gray-400 text-center leading-relaxed">
-                By joining, you agree to our terms of service. Payments are
-                processed via encrypted Stripe gateways.
-              </div>
+            {/* Terms Hint */}
+            <div className="p-6 bg-base-200/50 rounded-2xl text-[10px] text-center opacity-40 leading-relaxed uppercase tracking-tighter">
+              Participation requires a verified account. Prizes are distributed
+              via Stripe within 48 hours of winner selection.
             </div>
           </aside>
         </div>
 
-        {/* FULL WIDTH BOTTOM SECTION */}
-        <div className="lg:col-span-3 mt-10">
+        {/* --- BOTTOM SECTION --- */}
+        <div className="lg:col-span-3 mt-8">
           <ParticipantForThisContest id={id} />
         </div>
       </div>

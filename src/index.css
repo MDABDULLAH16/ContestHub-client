@@ -3,9 +3,8 @@
 @plugin "daisyui";
 
 /* Customize the built-in light theme with modern colors */
-@plugin "daisyui/theme" {
-  name: "dark";
-   
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake;
 
   /* Primary = Winner */
   --color-primary: #4C6EF5;         /* Winner / Primary Button / Logo */

@@ -29,6 +29,7 @@ import UserManagement from "../pages/Dashboard/Admin/UserManagement/UserManageme
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Profile from "../pages/Profile/Profile";
 import WhyContestHub from "../pages/WhyContestHub/WhyContestHub";
+import UserDashboard from "../pages/Dashboard/UserDashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -155,6 +156,11 @@ export const router = createBrowserRouter([
             Component: AllParticipants,
           },
         ],
+      },
+      {
+        path: "user",
+        Component: UserDashboard,
+       
       },
     ],
   },

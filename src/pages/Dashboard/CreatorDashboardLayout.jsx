@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { Plus, Menu, X, Home, Trophy, Wallet, Settings, LayoutDashboard } from "lucide-react";
 import StatsCreators from "./Creators/StatsCreators/StatsCreators";
+import ThemeToggle from "../../components/ThemeToggle/ThemeToggle";
 
 const CreatorDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -99,7 +100,7 @@ const CreatorDashboard = () => {
       {/* ================= Main Content ================= */}
       <div className="flex-1">
         {/* ================= Header ================= */}
-        <header className="sticky top-0 z-30 bg-white border-b">
+        <header className="sticky top-0 z-30 bg-base-100 border-b">
           <div className="flex items-center justify-between w-full px-4 sm:px-6 h-16">
             <div className="flex items-center gap-3">
               {/* Toggle Button (All Devices) */}
@@ -108,26 +109,31 @@ const CreatorDashboard = () => {
               </button>
 
               <div>
-                <h1 className="text-xl font-bold text-gray-900">
+                <h1 className="text-xl font-bold text-base-content">
                   Creator Dashboard
                 </h1>
-                <p className="text-sm text-gray-500 hidden sm:block">
+                <p className="text-sm text-base-content/70 hidden sm:block">
                   Manage your contests and earnings
                 </p>
               </div>
             </div>
 
-            {/* Create Contest Button */}
-            <Link
-              to="/dashboard/creator/create-contest"
-              className="inline-flex items-center gap-2 px-4 py-2
-              bg-linear-to-r from-indigo-600 to-purple-600
-              text-white rounded-lg text-sm font-medium
-              hover:shadow-lg transition"
-            >
-              <Plus size={18} />
-              Create Contest
-            </Link>
+            <div className="flex items-center gap-3">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+
+              {/* Create Contest Button */}
+              <Link
+                to="/dashboard/creator/create-contest"
+                className="inline-flex items-center gap-2 px-4 py-2
+                bg-linear-to-r from-indigo-600 to-purple-600
+                text-white rounded-lg text-sm font-medium
+                hover:shadow-lg transition"
+              >
+                <Plus size={18} />
+                Create Contest
+              </Link>
+            </div>
           </div>
         </header>
          

@@ -36,7 +36,7 @@ const NAV_LINKS = {
     { name: "Contests", href: "/contests", icon: Trophy },
     { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
-    { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
+    // { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
     { name: "Why ContestHub", href: "/why-contestHub", icon: Zap },
   ],
   creator: [
@@ -81,8 +81,8 @@ const DASHBOARD_LINKS = {
   user: [
     { name: "My Dashboard", href: "/dashboard/user", icon: BarChart3 },
     { name: "My Entries", href: "/entries", icon: Trophy },
-    { name: "Wishlist", href: "/wishlist", icon: User },
-    { name: "Be a Creator", href: "/creator", icon: Sparkles },
+
+    { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
     { name: "Profile", href: "/profile", icon: User },
   ],
 };
@@ -94,7 +94,7 @@ const NavItem = ({ link, onClick, size = 18 }) => {
     <Link
       to={link.href}
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-lg transition"
+      className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-base-content hover:bg-base-200 hover:text-primary rounded-lg transition"
     >
       <Icon size={size} /> {link.name}
     </Link>
@@ -147,7 +147,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full bg-white sticky top-0 z-50 border-b shadow-sm">
+    <nav className="w-full bg-base-100 sticky top-0 z-50 border-b shadow-sm">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
@@ -169,6 +169,7 @@ const Navbar = () => {
 
         {/* Desktop Right */}
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           {user ? (
             <div className="relative" ref={userMenuRef}>
               <button
@@ -183,12 +184,12 @@ const Navbar = () => {
               </button>
 
               {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg">
+                <div className="absolute right-0 mt-2 w-64 bg-base-100 border rounded-lg shadow-lg">
                   <div className="px-4 py-3 border-b">
                     <p className="font-semibold">
                       {user.displayName || "User"}
                     </p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+                    <p className="text-xs text-base-content/70">{user.email}</p>
                   </div>
 
                   {dashboardLinks.map((l) => (
@@ -214,7 +215,6 @@ const Navbar = () => {
                   >
                     <LogOut size={16} /> Logout
                   </button>
-                  <ThemeToggle/>
                 </div>
               )}
             </div>
@@ -223,12 +223,7 @@ const Navbar = () => {
               <Link to="/login" className="px-4 py-2 text-indigo-600">
                 Login
               </Link>
-              <Link
-                to="/register"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
-              >
-                Sign Up
-              </Link>
+             
             </>
           )}
         </div>

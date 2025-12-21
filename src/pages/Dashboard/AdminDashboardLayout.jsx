@@ -14,6 +14,7 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import DashboardHeader from "./DashboardHome/DashboardHeader";
 import UserManagement from "./Admin/UserManagement/UserManagement";
+import ThemeToggle from "../../components/ThemeToggle/ThemeToggle";
 
 const AdminDashboardLayout = () => {
   const { logoutUser } = useAuth();
@@ -71,6 +72,9 @@ const AdminDashboardLayout = () => {
             </svg>
           </label>
           <DashboardHeader />
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </nav>
         {/* Page Content */}
         <div className="p-6">
