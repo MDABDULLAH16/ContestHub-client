@@ -65,7 +65,7 @@ const DASHBOARD_LINKS = {
     { name: "Profile", href: "/profile", icon: User },
   ],
   creator: [
-    { name: "My Dashboard", href: "/dashboard/creator", icon: BarChart3 },
+    { name: "My Dashboard", href: "/dashboard/creator/creator-stats", icon: BarChart3 },
     {
       name: "Create Contest",
       href: "dashboard/creator/create-contest",

@@ -34,6 +34,7 @@ import MyEntriesContest from "../pages/Dashboard/User/MyEntriesContest/MyEntries
 import MyWinningContest from "../pages/Dashboard/User/MyWinningContest/MyWinningContest";
 import UserHome from "../pages/Dashboard/User/UserHome/UserHome";
 import MyStats from "../pages/Dashboard/User/MyStats/MyStats";
+import StatsCreators from "../pages/Dashboard/Creators/StatsCreators/StatsCreators";
 
 export const router = createBrowserRouter([
   {
@@ -143,6 +144,10 @@ export const router = createBrowserRouter([
         path: "creator",
         Component: CreatorHome,
         children: [
+          {
+            path: "creator-stats",
+            Component: StatsCreators,
+          },
           {
             path: "my-created-contests",
             Component: MyCreatedContest,

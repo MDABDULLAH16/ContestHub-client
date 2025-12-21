@@ -3,8 +3,7 @@ import StatsCreators from "../StatsCreators/StatsCreators";
 
 const CreatorHome = () => {
   return (
-    <>
-      <StatsCreators></StatsCreators>
+    <> 
       <Outlet></Outlet>
     </>
   );

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import StatsGrid from "../StatsGrid/StatsGrid";
+import StatsGrid from "../StatsGrid/AdminDashboard";
 import DashboardHeader from "./DashboardHeader";
 
 const DashboardHome = () => {
