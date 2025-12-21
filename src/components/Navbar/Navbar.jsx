@@ -80,7 +80,8 @@ const DASHBOARD_LINKS = {
   ],
   user: [
     { name: "My Dashboard", href: "/dashboard/user", icon: BarChart3 },
-    { name: "My Entries", href: "/entries", icon: Trophy },
+    { name: "My Entries", href: "/dashboard/user/my-entries-contests", icon: Trophy },
+ 
 
     { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
     { name: "Profile", href: "/profile", icon: User },

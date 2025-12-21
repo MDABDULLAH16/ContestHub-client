@@ -4,6 +4,8 @@ import {
   Lock,
   User,
   LogOut,
+  ShieldCheck,
+  BellRing,
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
@@ -11,23 +13,9 @@ import { useNavigate } from "react-router";
 import ProfileUpdate from "../Dashboard/ProfileUpdate/ProfileUpdate";
 
 const Settings = () => {
-  const { user, logoutUser } = useAuth();
+  const { logoutUser } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("profile");
-  const [formData, setFormData] = useState({
-    displayName: user?.displayName || "",
-    email: user?.email || "",
-    phone: "",
-    bio: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const handleLogout = async () => {
     try {
@@ -45,64 +33,86 @@ const Settings = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-base-200 transition-colors duration-500">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <SettingsIcon size={32} className="text-indigo-600" />
-            Settings
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Manage your account and preferences
-          </p>
+        <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-black text-base-content flex items-center gap-3 tracking-tighter">
+              <SettingsIcon size={36} className="text-indigo-500" />
+              Settings
+            </h1>
+            <p className="text-base-content/60 mt-1 font-medium">
+              Manage your professional account and preferences
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              {settingsTabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full text-left px-4 py-3 flex items-center gap-3 transition ${
-                      activeTab === tab.id
-                        ? "bg-indigo-600 text-white"
-                        : "text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    <Icon size={20} />
-                    <span className="font-medium">{tab.label}</span>
-                  </button>
-                );
-              })}
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-4 py-3 flex items-center gap-3 text-red-600 hover:bg-red-50 transition border-t border-gray-200 mt-2"
-              >
-                <LogOut size={20} />
-                <span className="font-medium">Logout</span>
-              </button>
+            <div className="bg-base-100 rounded-3xl shadow-xl border border-base-300 overflow-hidden sticky top-24">
+              <div className="p-2 space-y-1">
+                {settingsTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`w-full text-left px-4 py-3.5 rounded-2xl flex items-center gap-3 transition-all duration-300 ${
+                        isActive
+                          ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                          : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                      }`}
+                    >
+                      <Icon
+                        size={20}
+                        className={isActive ? "animate-pulse" : ""}
+                      />
+                      <span className="font-bold tracking-tight">
+                        {tab.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="p-2 border-t border-base-300 mt-2">
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-3.5 flex items-center gap-3 text-error hover:bg-error/10 transition-colors rounded-2xl font-bold"
+                >
+                  <LogOut size={20} />
+                  <span>Logout</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Content */}
+          {/* Content Area */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              {activeTab === "profile" && <ProfileUpdate></ProfileUpdate>}
+            <div className="bg-base-100 rounded-[2.5rem] shadow-xl border border-base-300 p-6 md:p-10 min-h-[600px]">
+              {/* Profile Tab */}
+              {activeTab === "profile" && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <ProfileUpdate />
+                </div>
+              )}
 
+              {/* Notifications Tab */}
               {activeTab === "notifications" && (
-                <div className="space-y-6">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      Notification Settings
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-500">
+                      <BellRing size={28} />
+                    </div>
+                    <h2 className="text-3xl font-black text-base-content tracking-tight">
+                      Notifications
                     </h2>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="grid gap-4">
                     {[
                       "Email notifications for new contests",
                       "Email when you win a contest",
@@ -111,78 +121,79 @@ const Settings = () => {
                     ].map((item, index) => (
                       <label
                         key={index}
-                        className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition"
+                        className="flex items-center justify-between p-5 bg-base-200 hover:bg-base-300/50 rounded-2xl cursor-pointer transition-all border border-transparent hover:border-base-300 group"
                       >
+                        <span className="text-base-content/80 font-bold group-hover:text-base-content transition-colors">
+                          {item}
+                        </span>
                         <input
                           type="checkbox"
                           defaultChecked
-                          className="w-4 h-4 text-indigo-600 rounded"
+                          className="checkbox checkbox-primary checkbox-md rounded-lg"
                         />
-                        <span className="text-gray-700">{item}</span>
                       </label>
                     ))}
                   </div>
 
-                  <button className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
+                  <button className="btn btn-primary rounded-2xl px-8 font-black shadow-lg shadow-indigo-500/20">
                     Save Preferences
                   </button>
                 </div>
               )}
 
+              {/* Security Tab */}
               {activeTab === "security" && (
-                <div className="space-y-6">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-error/10 rounded-2xl text-error">
+                      <ShieldCheck size={28} />
+                    </div>
+                    <h2 className="text-3xl font-black text-base-content tracking-tight">
                       Security Settings
                     </h2>
                   </div>
 
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <div className="max-w-md space-y-6">
+                    <h3 className="text-lg font-black text-base-content/60 uppercase tracking-widest">
                       Change Password
                     </h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Current Password
+
+                    {[
+                      { label: "Current Password", placeholder: "••••••••" },
+                      { label: "New Password", placeholder: "••••••••" },
+                      { label: "Confirm Password", placeholder: "••••••••" },
+                    ].map((field, idx) => (
+                      <div key={idx} className="form-control w-full">
+                        <label className="label">
+                          <span className="label-text font-bold opacity-70">
+                            {field.label}
+                          </span>
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                          placeholder={field.placeholder}
+                          className="input input-bordered bg-base-200 border-base-300 rounded-2xl focus:border-indigo-500 focus:outline-none h-14 font-medium"
                         />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          New Password
-                        </label>
-                        <input
-                          type="password"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Confirm Password
-                        </label>
-                        <input
-                          type="password"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                        />
-                      </div>
-                      <button className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
-                        Update Password
-                      </button>
-                    </div>
+                    ))}
+
+                    <button className="btn btn-primary w-full rounded-2xl font-black shadow-lg shadow-indigo-500/20 h-14">
+                      Update Password
+                    </button>
                   </div>
 
-                  <div className="border-t border-gray-200 pt-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Two-Factor Authentication
+                  <div className="pt-10 border-t border-base-300">
+                    <h3 className="text-xl font-black text-base-content mb-2 flex items-center gap-2">
+                      2FA Authentication
+                      <span className="badge badge-sm badge-ghost opacity-50 font-bold">
+                        Recommended
+                      </span>
                     </h3>
-                    <p className="text-gray-600 mb-4">
-                      Add an extra layer of security to your account
+                    <p className="text-base-content/60 font-medium mb-6">
+                      Add an extra layer of security to your account by
+                      requiring more than just a password to log in.
                     </p>
-                    <button className="px-6 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition font-medium">
+                    <button className="btn btn-outline border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white rounded-2xl px-8 font-black transition-all">
                       Enable 2FA
                     </button>
                   </div>

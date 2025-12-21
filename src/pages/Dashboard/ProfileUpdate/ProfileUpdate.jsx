@@ -3,12 +3,22 @@ import Swal from "sweetalert2";
 import { useAuth } from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import {
+  Save,
+  User,
+  Image as ImageIcon,
+  Mail,
+  Phone,
+  MapPin,
+  AlignLeft,
+  Globe,
+  Camera,
+} from "lucide-react";
 
 const ProfileUpdate = () => {
   const { user, updateProfileInfoInFirebase } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  // 1. Fetch current DB user details
   const { data: dbUser, refetch } = useQuery({
     queryKey: ["users", user?.email],
     enabled: !!user?.email,
@@ -18,11 +28,10 @@ const ProfileUpdate = () => {
     },
   });
 
-  // 2. Initialize React Hook Form
-  // 'values' will re-sync the form whenever dbUser changes
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     values: {
@@ -34,12 +43,16 @@ const ProfileUpdate = () => {
     },
   });
 
+  // Watch fields for live preview
+  const watchAll = watch();
+
   const onSubmit = async (data) => {
     try {
-      // A. Update Firebase (Display Name & Photo URL)
-      await updateProfileInfoInFirebase({ displayName: data.name, photoURL: data.photoURL });
+      await updateProfileInfoInFirebase({
+        displayName: data.name,
+        photoURL: data.photoURL,
+      });
 
-      // B. Update MongoDB
       const updateData = {
         name: data.name,
         photoURL: data.photoURL,
@@ -51,144 +64,242 @@ const ProfileUpdate = () => {
       const res = await axiosSecure.patch(`/users/${user?.email}`, updateData);
 
       if (res.data.modifiedCount > 0 || res.data.matchedCount > 0) {
-        // Trigger TanStack Query to refresh data across the app
         refetch();
-
         Swal.fire({
           icon: "success",
-          title: "Profile Updated",
-          text: "Your information has been saved successfully!",
+          title: "Profile Synced",
+          text: "Your changes are now live across the platform!",
           timer: 2000,
           showConfirmButton: false,
-          background: "#fff",
-          color: "#1e293b",
+          background:
+            document.documentElement.getAttribute("data-theme") === "dark"
+              ? "#1d232a"
+              : "#fff",
+          color:
+            document.documentElement.getAttribute("data-theme") === "dark"
+              ? "#a6adbb"
+              : "#1e293b",
         });
       }
     } catch (error) {
-      console.error(error);
-      Swal.fire({
-        icon: "error",
-        title: "Update Failed",
-        text: error.message,
-      });
+      Swal.fire({ icon: "error", title: "Update Failed", text: error.message });
     }
   };
 
   return (
-    <div className="max-w-2xl bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-      <h2 className="text-2xl font-black text-gray-900 mb-6">
-        Profile Settings
-      </h2>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Name Field */}
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-tight">
-            Full Name
-          </label>
-          <input
-            type="text"
-            {...register("name", { required: "Name is required" })}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none transition-all shadow-sm"
-            placeholder="Your display name"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
-          )}
-        </div>
-
-        {/* Photo URL Field */}
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-tight">
-            Photo URL
-          </label>
-          <input
-            type="text"
-            {...register("photoURL", { required: "Photo URL is required" })}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none transition-all shadow-sm"
-            placeholder="https://example.com/photo.jpg"
-          />
-          {errors.photoURL && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors.photoURL.message}
+    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 transition-colors duration-500">
+      {/* FORM SECTION */}
+      <div className="xl:col-span-2 order-2 xl:order-1">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-500">
+            <User size={28} />
+          </div>
+          <div>
+            <h2 className="text-3xl font-black text-base-content tracking-tight">
+              Personal Details
+            </h2>
+            <p className="text-base-content/50 text-sm font-medium">
+              Update your identity and contact info
             </p>
-          )}
-        </div>
-
-        {/* Email (Read Only) */}
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-tight">
-            Email Address
-          </label>
-          <input
-            type="email"
-            value={user?.email || ""}
-            readOnly
-            className="w-full px-4 py-3 border border-gray-100 rounded-xl bg-gray-50 text-gray-400 cursor-not-allowed outline-none"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Phone Field */}
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-tight">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              {...register("phone")}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-              placeholder="+880..."
-            />
-          </div>
-
-          {/* Address Field */}
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-tight">
-              Location / Address
-            </label>
-            <input
-              type="text"
-              {...register("address")}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none"
-              placeholder="Dhaka, Bangladesh"
-            />
           </div>
         </div>
 
-        {/* Bio Field */}
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-tight">
-            About You (Bio)
-          </label>
-          <textarea
-            {...register("bio")}
-            rows="4"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-600 outline-none resize-none"
-            placeholder="Tell the community about your expertise..."
-          ></textarea>
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Name */}
+            <div className="form-control">
+              <label className="label font-black text-[10px] tracking-widest opacity-50 uppercase">
+                Full Name
+              </label>
+              <div className="relative">
+                <User
+                  className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  {...register("name", { required: "Name is required" })}
+                  className="input input-bordered w-full bg-base-200 border-base-300 rounded-2xl pl-12 h-14 font-bold focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                  placeholder="John Doe"
+                />
+              </div>
+              {errors.name && (
+                <span className="text-error text-xs mt-1 font-bold">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full py-4 bg-slate-900 text-white rounded-2xl font-bold transition-all flex justify-center items-center gap-2 ${
-            isSubmitting
-              ? "opacity-70 cursor-not-allowed"
-              : "hover:bg-indigo-600 shadow-lg shadow-indigo-100"
-          }`}
-        >
-          {isSubmitting ? (
-            <>
-              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              Synchronizing Profile...
-            </>
-          ) : (
-            "Save All Changes"
-          )}
-        </button>
-      </form>
+            {/* Photo URL */}
+            <div className="form-control">
+              <label className="label font-black text-[10px] tracking-widest opacity-50 uppercase">
+                Avatar URL
+              </label>
+              <div className="relative">
+                <ImageIcon
+                  className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  {...register("photoURL", { required: "URL is required" })}
+                  className="input input-bordered w-full bg-base-200 border-base-300 rounded-2xl pl-12 h-14 font-bold"
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Phone */}
+            <div className="form-control">
+              <label className="label font-black text-[10px] tracking-widest opacity-50 uppercase">
+                Phone Number
+              </label>
+              <div className="relative">
+                <Phone
+                  className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  {...register("phone")}
+                  className="input input-bordered w-full bg-base-200 border-base-300 rounded-2xl pl-12 h-14 font-bold"
+                  placeholder="+1 234..."
+                />
+              </div>
+            </div>
+
+            {/* Address (RE-ADDED) */}
+            <div className="form-control">
+              <label className="label font-black text-[10px] tracking-widest opacity-50 uppercase">
+                Location / Address
+              </label>
+              <div className="relative">
+                <MapPin
+                  className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  {...register("address")}
+                  className="input input-bordered w-full bg-base-200 border-base-300 rounded-2xl pl-12 h-14 font-bold"
+                  placeholder="New York, USA"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Email (Disabled) */}
+          <div className="form-control">
+            <label className="label font-black text-[10px] tracking-widest opacity-50 uppercase">
+              Email (Verified)
+            </label>
+            <div className="relative">
+              <Mail
+                className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+                size={18}
+              />
+              <input
+                type="email"
+                value={user?.email || ""}
+                disabled
+                className="input input-bordered w-full bg-base-300/50 border-base-300 rounded-2xl pl-12 h-14 font-bold italic opacity-60 cursor-not-allowed"
+              />
+            </div>
+          </div>
+
+          {/* Bio */}
+          <div className="form-control">
+            <label className="label font-black text-[10px] tracking-widest opacity-50 uppercase">
+              Professional Bio
+            </label>
+            <div className="relative">
+              <AlignLeft
+                className="absolute left-4 top-6 opacity-30"
+                size={18}
+              />
+              <textarea
+                {...register("bio")}
+                rows="4"
+                className="textarea textarea-bordered w-full bg-base-200 border-base-300 rounded-2xl pl-12 pt-5 font-bold text-base resize-none focus:ring-2 focus:ring-indigo-500/20"
+                placeholder="Tell us about your creative journey..."
+              ></textarea>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="btn btn-primary w-full rounded-2xl font-black shadow-xl shadow-indigo-500/20 h-14 text-lg border-none"
+          >
+            {isSubmitting ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <Save size={20} /> Update Profile
+              </span>
+            )}
+          </button>
+        </form>
+      </div>
+
+      {/* PREVIEW SECTION (DESKTOP) */}
+      <div className="xl:col-span-1 order-1 xl:order-2">
+        <div className="sticky top-10">
+          <p className="text-[10px] font-black tracking-[0.2em] opacity-30 mb-4 uppercase text-center xl:text-left">
+            Card Preview
+          </p>
+          <div className="bg-base-200/50 rounded-[2.5rem] p-6 border border-base-300 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[50px] rounded-full"></div>
+
+            <div className="relative flex flex-col items-center text-center">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden ring-4 ring-indigo-500/20 shadow-xl mb-4 relative">
+                <img
+                  src={
+                    watchAll.photoURL ||
+                    "https://i.ibb.co.com/B203KXC7/man2.png"
+                  }
+                  alt="preview"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                  <Camera size={20} className="text-white" />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-black truncate max-w-full">
+                {watchAll.name || "User Name"}
+              </h3>
+              <p className="text-xs font-bold opacity-40 mb-4 truncate w-full">
+                {user?.email}
+              </p>
+
+              <div className="grid grid-cols-2 gap-2 w-full mb-4">
+                <div className="bg-base-100 p-2 rounded-xl border border-base-300">
+                  <Globe size={14} className="mx-auto mb-1 text-indigo-500" />
+                  <p className="text-[9px] font-black uppercase tracking-tighter truncate">
+                    {watchAll.address || "Remote"}
+                  </p>
+                </div>
+                <div className="bg-base-100 p-2 rounded-xl border border-base-300">
+                  <Phone size={14} className="mx-auto mb-1 text-purple-500" />
+                  <p className="text-[9px] font-black uppercase tracking-tighter truncate">
+                    {watchAll.phone || "No Link"}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-[11px] font-medium italic opacity-60 leading-tight line-clamp-3">
+                "
+                {watchAll.bio ||
+                  "Creative mind ready for the next challenge..."}
+                "
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

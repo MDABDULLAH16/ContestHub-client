@@ -1,216 +1,147 @@
-import { Trophy, Heart, BarChart3, ArrowRight } from "lucide-react";
-import { Link } from "react-router";
+import { useState, useRef, useEffect } from "react";
+import { Link, NavLink, Outlet } from "react-router";
+import { Plus, Menu, X, Home, Trophy, Wallet, Settings, LayoutDashboard, Edit2, User } from "lucide-react";
+ 
+import ThemeToggle from "../../components/ThemeToggle/ThemeToggle";
 
 const UserDashboard = () => {
-  const stats = [
-    { label: "Contests Joined", value: "12", icon: Trophy, color: "indigo" },
-    { label: "Contests Won", value: "3", icon: Trophy, color: "green" },
-    { label: "Total Earnings", value: "$450", icon: BarChart3, color: "purple" },
-    { label: "Wishlist Items", value: "8", icon: Heart, color: "red" },
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null);
+
+  const navLinks = [
+    { name: "Go Home", to: "/", icon: Home },
+    { name: "Dashboard", to: "/dashboard/user", icon: LayoutDashboard },
+    {
+      name: "My Entries Contests",
+      to: "/dashboard/user/my-entries-contests",
+      icon: Edit2,
+    },
+ 
+    {
+      name: "My Winning Contests",
+      to: "/dashboard/user/my-winning-contests",
+      icon: Trophy,
+    },
+    { name: "profile", to: "/profile", icon: User },
   ];
 
-  const myEntries = [
-    {
-      id: 1,
-      contestTitle: "Logo Design Challenge",
-      entryTitle: "Modern Tech Logo",
-      status: "Submitted",
-      submittedDate: "Dec 5, 2024",
-      prize: "$500",
-    },
-    {
-      id: 2,
-      contestTitle: "Article Writing",
-      entryTitle: "AI Future Article",
-      status: "Under Review",
-      submittedDate: "Dec 3, 2024",
-      prize: "$200",
-    },
-    {
-      id: 3,
-      contestTitle: "Business Pitch",
-      entryTitle: "EdTech Startup",
-      status: "Won",
-      submittedDate: "Nov 28, 2024",
-      prize: "$1000",
-    },
-  ];
+  // Close sidebar if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false);
+      }
+    };
+
+    if (sidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarOpen]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Dashboard</h1>
-          <p className="text-gray-600 mt-2">Track your contests and earnings</p>
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* ================= Sidebar ================= */}
+      <aside
+        ref={sidebarRef}
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r
+        transform transition-transform duration-300
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between px-6 h-16 border-b">
+          <h2
+            className={`text-lg font-bold text-indigo-600 ${
+              !sidebarOpen && "opacity-0"
+            }`}
+          >
+            Creator Panel
+          </h2>
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={22} />
+          </button>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            const colorClass = {
-              indigo: "bg-indigo-100 text-indigo-600",
-              green: "bg-green-100 text-green-600",
-              purple: "bg-purple-100 text-purple-600",
-              red: "bg-red-100 text-red-600",
-            };
-
-            return (
+        {/* Sidebar Links */}
+        <nav className="p-4 space-y-2">
+          {navLinks.map(({ name, to, icon: Icon }) => (
+            <NavLink
+              end={true}
+              key={name}
+              to={to}
+              onClick={() => setSidebarOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition
+                ${
+                  isActive
+                    ? "bg-indigo-100 text-indigo-600"
+                    : "text-gray-600 hover:bg-gray-100"
+                }
+                ${!sidebarOpen ? "justify-center" : ""}`
+              }
+            >
+              {/* Tooltip wrapper when sidebar closed */}
               <div
-                key={index}
-                className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-lg transition"
+                className={`${!sidebarOpen ? "tooltip tooltip-right" : ""}`}
+                data-tip={name}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-lg flex items-center justify-center ${colorClass[stat.color]}`}
-                  >
-                    <Icon size={24} />
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm font-medium">{stat.label}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{stat.value}</p>
+                <Icon size={20} />
               </div>
-            );
-          })}
-        </div>
+              {sidebarOpen && <span>{name}</span>}
+            </NavLink>
+          ))}
+        </nav>
+      </aside>
 
-        {/* My Entries Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="text-lg font-bold text-gray-900">My Entries</h2>
-                <Link
-                  to="/user/entries"
-                  className="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1"
-                >
-                  View All <ArrowRight size={16} />
-                </Link>
-              </div>
+      {/* ================= Main Content ================= */}
+      <div className="flex-1">
+        {/* ================= Header ================= */}
+        <header className="sticky top-0 z-30 bg-base-100 border-b">
+          <div className="flex items-center justify-between w-full px-4 sm:px-6 h-16">
+            <div className="flex items-center gap-3">
+              {/* Toggle Button (All Devices) */}
+              <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+                {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
 
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                        Contest
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                        Entry Title
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                        Submitted
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {myEntries.map((entry) => (
-                      <tr
-                        key={entry.id}
-                        className="border-b border-gray-200 hover:bg-gray-50 transition"
-                      >
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                          {entry.contestTitle}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {entry.entryTitle}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span
-                            className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                              entry.status === "Won"
-                                ? "bg-green-100 text-green-700"
-                                : entry.status === "Under Review"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-blue-100 text-blue-700"
-                            }`}
-                          >
-                            {entry.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {entry.submittedDate}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
-              <div className="space-y-3">
-                <Link
-                  to="/contests"
-                  className="block p-3 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition font-medium text-sm"
-                >
-                  Browse Contests
-                </Link>
-                <Link
-                  to="/user/wishlist"
-                  className="block p-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition font-medium text-sm"
-                >
-                  My Wishlist
-                </Link>
-                <Link
-                  to="/settings"
-                  className="block p-3 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition font-medium text-sm"
-                >
-                  Settings
-                </Link>
+              <div>
+                <h1 className="text-xl font-bold text-base-content">
+                  My Dashboard
+                </h1>
+                <p className="text-sm text-base-content/70 hidden sm:block">
+                  Manage your contests and earnings
+                </p>
               </div>
             </div>
 
-            {/* Recommended Contests */}
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Recommended for You
-              </h3>
-              <div className="space-y-4">
-                {[
-                  {
-                    title: "UI Design Challenge",
-                    prize: "$750",
-                    entries: 120,
-                  },
-                  { title: "Content Writing", prize: "$300", entries: 89 },
-                ].map((contest, index) => (
-                  <div
-                    key={index}
-                    className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
-                  >
-                    <p className="font-medium text-gray-900 text-sm">
-                      {contest.title}
-                    </p>
-                    <div className="flex items-center justify-between mt-2">
-                      <span className="text-xs text-gray-600">
-                        {contest.entries} entries
-                      </span>
-                      <span className="font-semibold text-indigo-600 text-sm">
-                        {contest.prize}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="flex items-center gap-3">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+
+              {/* Create Contest Button */}
               <Link
-                to="/contests"
-                className="mt-4 block text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium text-sm"
+                to="/be-creator"
+                className="inline-flex items-center gap-2 px-4 py-2
+                bg-linear-to-r from-indigo-600 to-purple-600
+                text-white rounded-lg text-sm font-medium
+                hover:shadow-lg transition"
               >
-                Explore More
+                <Plus size={18} />
+                Be A Creator
               </Link>
             </div>
           </div>
-        </div>
+        </header>
+         
+        {/* ================= Page Content ================= */}
+        <main className="p-4 sm:p-6">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

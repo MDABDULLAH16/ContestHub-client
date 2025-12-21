@@ -30,6 +30,9 @@ import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Profile from "../pages/Profile/Profile";
 import WhyContestHub from "../pages/WhyContestHub/WhyContestHub";
 import UserDashboard from "../pages/Dashboard/UserDashboardLayout";
+import MyEntriesContest from "../pages/Dashboard/User/MyEntriesContest/MyEntriesContest";
+import MyWinningContest from "../pages/Dashboard/User/MyWinningContest/MyWinningContest";
+import UserHome from "../pages/Dashboard/User/UserHome/UserHome";
 
 export const router = createBrowserRouter([
   {
@@ -159,14 +162,26 @@ export const router = createBrowserRouter([
       },
       {
         path: "user",
-        Component: UserDashboard,
-       
+        Component: UserHome,
+        children: [
+          {
+            path: "my-entries-contests",
+            Component: MyEntriesContest,
+          },
+          {
+            path: "my-winning-contests",
+            Component: MyWinningContest,
+          },
+          {
+            path: "my-profile",
+            Component: Profile,
+          },
+        ],
       },
     ],
   },
-
   {
-    path: "*",
+    path: "*", 
     Component: NotFound,
   },
 ]);
