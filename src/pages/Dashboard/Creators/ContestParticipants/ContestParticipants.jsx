@@ -93,7 +93,12 @@ const ContestParticipants = () => {
                 </div>
                 <div className="stat-value text-primary text-2xl">
                   $
-                  {participants.reduce((acc, curr) => acc + curr.paidAmount, 0)}
+                  {participants
+                    .reduce(
+                      (acc, curr) => acc + Number(curr.paidAmount || 0),
+                      0
+                    )
+                    .toLocaleString()}
                 </div>
               </div>
             </div>
@@ -116,14 +121,13 @@ const ContestParticipants = () => {
             <tbody>
               {participants.map((p) => {
                 console.log(p);
-                
+
                 // LOGIC CHECK
                 const isEnded = p?.endDate ? now > new Date(p?.endDate) : false;
                 const isSubmitted = p.taskSubmissionStatus === "submitted";
                 const canGrade = isEnded && isSubmitted;
-                console.log(isEnded,);
+                console.log(isEnded);
                 console.log(canGrade);
-                
 
                 return (
                   <tr
@@ -198,15 +202,15 @@ const ContestParticipants = () => {
                       </div>
                     </td>
                     {/* result */}
-                    <td className="bg-base-100 border-y border-base-300 text-center">  
+                    <td className="bg-base-100 border-y border-base-300 text-center">
                       {p.gradingStatus === "Winner" ? (
                         <div className="flex items-center gap-2 text-yellow-600 font-black italic text-sm justify-center">
                           <Trophy size={14} className="animate-pulse" /> Winner
                         </div>
                       ) : (
-                          <div className="flex items-center gap-2   opacity-30 text-xs font-bold justify-center">  
-                            {p.gradingStatus}
-                            </div>
+                        <div className="flex items-center gap-2   opacity-30 text-xs font-bold justify-center">
+                          {p.gradingStatus}
+                        </div>
                       )}
                     </td>
 

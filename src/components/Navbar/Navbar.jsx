@@ -41,11 +41,11 @@ const NAV_LINKS = {
   ],
   creator: [
     { name: "Home", href: "/", icon: Home },
-    {
-      name: "Create Contest",
-      href: "/dashboard/creator/create-contest",
-      icon: Plus,
-    },
+    // {
+    //   name: "Create Contest",
+    //   href: "/dashboard/creator/create-contest",
+    //   icon: Plus,
+    // },
     { name: "Contests", href: "/contests", icon: Trophy },
     { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
@@ -95,7 +95,7 @@ const NavItem = ({ link, onClick, size = 18 }) => {
     <Link
       to={link.href}
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-base-content hover:bg-base-200 hover:text-primary rounded-lg transition"
+      className="flex items-center gap-3 px-2 py-2 text-sm font-medium text-base-content hover:bg-base-200 hover:text-primary rounded-lg transition"
     >
       <Icon size={size} /> {link.name}
     </Link>
