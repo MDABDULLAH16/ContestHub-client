@@ -15,10 +15,12 @@ import {
   Trophy,
   Sparkles,
   ListOrdered,
+  BadgeInfo,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import useRole from "../../hooks/useUserRole";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 /* -------------------- LINK CONFIG -------------------- */
 const NAV_LINKS = {
@@ -26,6 +28,8 @@ const NAV_LINKS = {
     { name: "Home", href: "/", icon: Home },
     { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "Contests", href: "/contests", icon: Trophy },
+    { name: "Why ContestHub", href: "/why-contestHub", icon: Zap },
+    { name: "About Us", href: "/about", icon: BadgeInfo },
   ],
   user: [
     { name: "Home", href: "/", icon: Home },
@@ -33,6 +37,7 @@ const NAV_LINKS = {
     { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
     { name: "Be a Creator", href: "/be-creator", icon: Sparkles },
+    { name: "Why ContestHub", href: "/why-contestHub", icon: Zap },
   ],
   creator: [
     { name: "Home", href: "/", icon: Home },
@@ -44,6 +49,7 @@ const NAV_LINKS = {
     { name: "Contests", href: "/contests", icon: Trophy },
     { name: "Leaderboard", href: "/leaderboard", icon: ListOrdered },
     { name: "How It Works", href: "/how-it-works", icon: Zap },
+    { name: "Why ContestHub", href: "/why-contestHub", icon: Zap },
   ],
 };
 
@@ -208,6 +214,7 @@ const Navbar = () => {
                   >
                     <LogOut size={16} /> Logout
                   </button>
+                  <ThemeToggle/>
                 </div>
               )}
             </div>

@@ -28,6 +28,7 @@ import AllParticipants from "../pages/Dashboard/Creators/AllParticipants/AllPart
 import UserManagement from "../pages/Dashboard/Admin/UserManagement/UserManagement";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Profile from "../pages/Profile/Profile";
+import WhyContestHub from "../pages/WhyContestHub/WhyContestHub";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: "how-it-works",
         Component: HowItWorks,
+      },
+      {
+        path: "why-contestHub",
+        Component: WhyContestHub,
       },
       {
         path: "login",
