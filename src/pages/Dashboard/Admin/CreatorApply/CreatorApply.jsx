@@ -3,9 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import Loader from "../../../../components/Loader/Loader";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import {
+  Inbox,
+  FileText,
+  CheckCircle,
+  XCircle,
+  ExternalLink,
+  UserCheck,
+} from "lucide-react";
 
-/* ---------------- MOCK DATA ---------------- */
- 
 const initialCreatorState = {
   _id: "",
   name: "",
@@ -21,202 +27,236 @@ const CreatorApply = () => {
   const [selectedCreator, setSelectedCreator] = useState(initialCreatorState);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  /* ---------------- FETCH (UI ONLY) ---------------- */
-  const { data: creators = [], isLoading ,refetch} = useQuery({
-    queryKey: ['creators',],
+  const {
+    data: creators = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["creators"],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/creators`)
+      const res = await axiosSecure.get(`/creators`);
       return res.data;
     },
   });
 
-  /* ---------------- HANDLERS ---------------- */
   const handleSeeApply = (creator) => {
     setSelectedCreator(creator);
     modalRef.current?.showModal();
   };
 
-const handleUpdateStatus = async (status) => {
-  // 1️⃣ Close modal first (CRITICAL)
-  modalRef.current?.close();
+  const handleUpdateStatus = async (status) => {
+    modalRef.current?.close();
+    await new Promise((r) => setTimeout(r, 50));
 
-  // Allow dialog stack to clear
-  await new Promise((r) => setTimeout(r, 50));
-
-  // 2️⃣ Confirmation
-  const result = await Swal.fire({
-    title: "Are you sure?",
-    text: `Do you want to ${status} this application?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: status === "accepted" ? "#10B981" : "#EF4444",
-    cancelButtonColor: "#6B7280",
-    confirmButtonText: `Yes, ${status}!`,
-    allowOutsideClick: false,
-  });
-
-  // 3️⃣ If cancelled → reopen modal (GOOD UX)
-  if (!result.isConfirmed) {
-    modalRef.current?.showModal();
-    return;
-  }
-
-  try {
-    setIsUpdating(true);
-
-    // 4️⃣ API CALL
-    await axiosSecure.patch(`/creators?email=${selectedCreator.email}`, {
-      status,
+    const result = await Swal.fire({
+      title: `<span class="text-base-content uppercase font-black">Confirm ${status}?</span>`,
+      text: `Change application status for ${selectedCreator.name}?`,
+      icon: "warning",
+      showCancelButton: true,
+      background: "#1e293b",
+      confirmButtonColor: status === "accepted" ? "#10B981" : "#EF4444",
+      cancelButtonColor: "#334155",
+      confirmButtonText: `Yes, ${status}!`,
     });
 
-    console.log("UPDATED:", selectedCreator.email, status);
+    if (!result.isConfirmed) {
+      modalRef.current?.showModal();
+      return;
+    }
 
-    // 5️⃣ Success feedback
-    await Swal.fire({
-      icon: "success",
-      title: status === "accepted" ? "Accepted!" : "Rejected!",
-      text: "Creator application updated successfully.",
-      timer: 2000,
-      showConfirmButton: false,
-    });
-    refetch()
-  } catch (error) {
-    console.error("Update failed:", error);
+    try {
+      setIsUpdating(true);
+      await axiosSecure.patch(`/creators?email=${selectedCreator.email}`, {
+        status,
+      });
 
-    // ❌ Error feedback
-    Swal.fire({
-      icon: "error",
-      title: "Update Failed",
-      text: "Something went wrong. Please try again.",
-    });
+      await Swal.fire({
+        icon: "success",
+        title: "Database Updated",
+        background: "#1e293b",
+        color: "#fff",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      refetch();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Action Failed",
+        background: "#1e293b",
+        color: "#fff",
+      });
+      modalRef.current?.showModal();
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
-    // Optional: reopen modal on error
-    modalRef.current?.showModal();
-  } finally {
-    setIsUpdating(false);
-  }
-};
-
-
-
-  /* ---------------- LOADING ---------------- */
-  if (isLoading) {
-    return <Loader/>
-    
-  }
+  if (isLoading) return <Loader />;
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 border-b pb-2">
-        📥 Creator Applications{" "}
-        <span className="text-primary">({creators.length})</span>
-      </h1>
-
-      {/* ---------------- TABLE ---------------- */}
-      <div className="overflow-x-auto shadow-xl rounded-lg bg-white">
-        <table className="table w-full">
-          <thead className="bg-primary text-white">
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {creators.map((creator, index) => (
-              <tr key={creator._id} className="hover:bg-gray-50">
-                <th>{index + 1}</th>
-                <td className="font-medium">{creator.name}</td>
-                <td>{creator.email}</td>
-                <td>
-                  <span
-                    className={`${
-                      creator.status === "accepted"
-                        ? "badge badge-primary" : creator.status==='rejected' ?'badge badge-error text-white'
-                        : "badge badge-warning font-semibold text-white"
-                    }`}
-                  >
-                    {creator.status}
-                  </span>
-                </td>
-                <td className="text-center">
-                  <button
-                    onClick={() => handleSeeApply(creator)}
-                    className="btn btn-sm btn-info text-white"
-                  >
-                    See Application
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-base-content uppercase italic">
+            Creator <span className="text-indigo-500">Applications</span>
+          </h1>
+          <p className="text-[10px] font-bold opacity-40 uppercase tracking-[0.3em] mt-1">
+            Reviewing {creators.length} pending requests
+          </p>
+        </div>
+        <div className="p-3 bg-base-100 border border-base-300 rounded-2xl shadow-lg">
+          <Inbox size={20} className="text-indigo-500" />
+        </div>
       </div>
 
-      {/* ---------------- MODAL ---------------- */}
-      <dialog ref={modalRef} className="modal">
-        <div className="modal-box w-11/12 max-w-3xl p-8">
-          <h3 className="font-bold text-2xl text-primary mb-4 border-b pb-2">
-            Application Details
-          </h3>
+      {/* Table Container */}
+      <div className="bg-base-100 rounded-2xl border border-base-300 shadow-2xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            <thead className="bg-base-200/50">
+              <tr className="border-b border-base-300 text-base-content/40 uppercase text-[10px] font-black tracking-widest">
+                <th className="py-6 px-8">#</th>
+                <th>Applicant</th>
+                <th>Status</th>
+                <th className="text-center">Review</th>
+              </tr>
+            </thead>
+            <tbody>
+              {creators.map((creator, index) => (
+                <tr
+                  key={creator._id}
+                  className="border-b border-base-300/50 hover:bg-indigo-600/5 transition-all group"
+                >
+                  <th className="px-8 opacity-30 text-xs">{index + 1}</th>
+                  <td>
+                    <div className="flex flex-col">
+                      <span className="font-black text-sm uppercase text-base-content">
+                        {creator.name}
+                      </span>
+                      <span className="text-[10px] font-bold opacity-40 lowercase">
+                        {creator.email}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span
+                      className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center w-fit gap-2 border ${
+                        creator.status === "accepted"
+                          ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                          : creator.status === "rejected"
+                          ? "bg-rose-500/10 text-rose-500 border-rose-500/20"
+                          : "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                      }`}
+                    >
+                      <div
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          creator.status === "accepted"
+                            ? "bg-emerald-500"
+                            : creator.status === "rejected"
+                            ? "bg-rose-500"
+                            : "bg-amber-500 animate-pulse"
+                        }`}
+                      ></div>
+                      {creator.status}
+                    </span>
+                  </td>
+                  <td className="text-center">
+                    <button
+                      onClick={() => handleSeeApply(creator)}
+                      className="btn btn-sm bg-indigo-600/10 hover:bg-indigo-600 text-indigo-500 hover:text-white border-none rounded-xl text-[10px] font-black uppercase tracking-widest transition-all px-4"
+                    >
+                      <FileText size={14} className="mr-1" /> View Dossier
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-          <div className="space-y-4">
-            <Info label="Name" value={selectedCreator.name} />
-            <Info label="Email" value={selectedCreator.email} />
+      {/* MODAL */}
+      <dialog ref={modalRef} className="modal backdrop-blur-md">
+        <div className="modal-box bg-base-100 border border-base-300 rounded-[2.5rem] p-10 max-w-3xl shadow-2xl">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="p-3 bg-indigo-600/10 text-indigo-500 rounded-2xl">
+              <UserCheck size={24} />
+            </div>
+            <h3 className="font-black text-2xl uppercase tracking-tighter text-base-content">
+              Applicant <span className="text-indigo-500">Portfolio</span>
+            </h3>
+          </div>
 
-            <div className="bg-white p-4 rounded-lg border">
-              <p className="font-semibold mb-2">Reason</p>
-              <blockquote className="italic text-gray-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <Info label="Full Name" value={selectedCreator.name} />
+            <Info label="Email Address" value={selectedCreator.email} />
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-base-200 p-6 rounded-2xl border border-base-300 relative">
+              <span className="absolute -top-3 left-6 bg-indigo-600 text-white text-[8px] font-black uppercase px-3 py-1 rounded-full">
+                Reasoning
+              </span>
+              <p className="text-sm italic text-base-content leading-relaxed opacity-80">
                 "{selectedCreator.reason}"
-              </blockquote>
+              </p>
             </div>
 
-            <div className="bg-white p-4 rounded-lg border">
-              <p className="font-semibold mb-2">Portfolio</p>
-              <p className="text-blue-600 underline">
-                {selectedCreator.portfolio || "Not provided"}
-              </p>
+            <div className="bg-base-200 p-6 rounded-2xl border border-base-300 relative group overflow-hidden">
+              <span className="absolute -top-3 left-6 bg-emerald-600 text-white text-[8px] font-black uppercase px-3 py-1 rounded-full">
+                Portfolio Link
+              </span>
+              <a
+                href={selectedCreator.portfolio}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-indigo-500 font-bold hover:underline"
+              >
+                {selectedCreator.portfolio || "No Link Provided"}{" "}
+                <ExternalLink size={14} />
+              </a>
             </div>
           </div>
 
-          <div className="modal-action gap-3 mt-6">
+          <div className="modal-action gap-3 mt-10">
             <button
               onClick={() => handleUpdateStatus("rejected")}
-              className="btn btn-error text-white"
+              className="btn bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border-none rounded-xl font-black uppercase text-[10px] tracking-widest px-6"
               disabled={isUpdating}
             >
-              ❌ Reject
+              <XCircle size={16} className="mr-1" /> Reject
             </button>
 
             <button
               onClick={() => handleUpdateStatus("accepted")}
-              className="btn btn-success text-white"
+              className="btn bg-emerald-500 hover:bg-emerald-600 text-white border-none rounded-xl font-black uppercase text-[10px] tracking-widest px-8 shadow-lg shadow-emerald-500/20"
               disabled={isUpdating}
             >
-              ✅ Accept
+              <CheckCircle size={16} className="mr-1" /> Approve Creator
             </button>
 
             <form method="dialog">
-              <button className="btn">Close</button>
+              <button className="btn btn-ghost rounded-xl font-black text-[10px] uppercase opacity-40">
+                Close
+              </button>
             </form>
           </div>
         </div>
-
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
       </dialog>
     </div>
   );
 };
 
-/* ---------------- SMALL UI HELPER ---------------- */
 const Info = ({ label, value }) => (
-  <div className="flex justify-between bg-gray-100 p-3 rounded-lg">
-    <span className="font-semibold">{label}:</span>
-    <span>{value}</span>
+  <div className="flex flex-col bg-base-200 p-4 rounded-2xl border border-base-300">
+    <span className="text-[9px] font-black uppercase opacity-30 tracking-widest mb-1">
+      {label}
+    </span>
+    <span className="font-bold text-sm text-base-content truncate">
+      {value}
+    </span>
   </div>
 );
 

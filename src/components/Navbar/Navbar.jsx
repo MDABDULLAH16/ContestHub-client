@@ -55,7 +55,7 @@ const NAV_LINKS = {
 
 const DASHBOARD_LINKS = {
   admin: [
-    { name: "Dashboard", href: "/dashboard/admin", icon: BarChart3 },
+    { name: "Dashboard", href: "/dashboard/admin/admin-stats", icon: BarChart3 },
     {
       name: "Manage Users",
       href: "/dashboard/admin/user-management",

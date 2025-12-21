@@ -7,7 +7,6 @@ import PrivateRouter from "./PrivateRouter";
 import Contests from "./../pages/Contests/Contests";
 import About from "../pages/About/About";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
-
 import DashboardLayout from "./../pages/Layout/DashboardLayout/DashboardLayout";
 import BeACreator from "./../pages/Dashboard/User/BeACreator/BeACreator";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
@@ -29,12 +28,12 @@ import UserManagement from "../pages/Dashboard/Admin/UserManagement/UserManageme
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Profile from "../pages/Profile/Profile";
 import WhyContestHub from "../pages/WhyContestHub/WhyContestHub";
-import UserDashboard from "../pages/Dashboard/UserDashboardLayout";
 import MyEntriesContest from "../pages/Dashboard/User/MyEntriesContest/MyEntriesContest";
 import MyWinningContest from "../pages/Dashboard/User/MyWinningContest/MyWinningContest";
 import UserHome from "../pages/Dashboard/User/UserHome/UserHome";
 import MyStats from "../pages/Dashboard/User/MyStats/MyStats";
 import StatsCreators from "../pages/Dashboard/Creators/StatsCreators/StatsCreators";
+import AdminStats from "../pages/Dashboard/AdminStats/AdminStats";
 
 export const router = createBrowserRouter([
   {
@@ -133,6 +132,7 @@ export const router = createBrowserRouter([
         path: "admin",
         Component: DashboardHome,
         children: [
+          { path: "admin-stats", element: <AdminStats /> },
           { path: "creator-apply", element: <CreatorApply /> },
           { path: "applied-contests", element: <AppliedContests /> },
           { path: "user-management", element: <UserManagement /> },

@@ -12,11 +12,11 @@ const WinnerSection = () => {
     const { data: winners = [], isLoading } = useQuery({
         queryKey: ["winners"],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/winner?gradingStatus=winner`);
+            const res = await axiosSecure.get(`/winner?gradingStatus=Winner`);
             return res.data;
         },
     });
-    console.log('w',winners);
+ 
     
     if (isLoading) {
         return <Loader></Loader>;

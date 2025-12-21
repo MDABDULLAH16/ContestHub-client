@@ -23,13 +23,13 @@ const WhyContestHub = () => {
     <div className="bg-base-100 transition-colors duration-500">
       {/* ================= HERO SECTION ================= */}
       <section className="py-24 bg-linear-to-br from-indigo-600 via-purple-600 to-indigo-700 text-white overflow-hidden relative">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <h1
             className="text-5xl md:text-7xl font-black mb-8 tracking-tighter"
             data-aos="fade-up"
           >
-            Why<span className="text-indigo-200"> ContestHub</span>?
+            Why<span className=""> ContestHub</span>?
           </h1>
           <p
             className="max-w-2xl mx-auto text-lg md:text-xl opacity-90 font-medium leading-relaxed"

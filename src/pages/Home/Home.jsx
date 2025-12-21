@@ -3,13 +3,19 @@ import Banner from './Banner/Banner';
 import Loader from '../../components/Loader/Loader';
 import PopularContests from './PopularContests/PopularContests';
 import WinnerSection from './WinnerAdvertisement/WinnerAdvertisement';
+import TrustedByCreators from './TrustedByCreators/TrustedByCreators';
+import StatsSection from './HomeStats/HomeStats';
+import PartnerBrands from './PartnerBrands/PartnarBrands';
 
 const Home = () => {
     return (
         <div>
-            <Banner/>
+            <Banner />
+            <PartnerBrands></PartnerBrands>
             <PopularContests></PopularContests>
-           <WinnerSection></WinnerSection>
+            <WinnerSection></WinnerSection>
+            <StatsSection/>
+            <TrustedByCreators/>
            
         </div>
     );

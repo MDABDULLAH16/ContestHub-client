@@ -33,7 +33,7 @@
   --color-completed: #6C757D;
 }
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif !important;
 }
 .my-swal-container {
     z-index: 9999 !important; 

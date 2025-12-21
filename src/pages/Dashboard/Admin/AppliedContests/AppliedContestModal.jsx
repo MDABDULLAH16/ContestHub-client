@@ -2,6 +2,14 @@ import React from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import {
+  Trash2,
+  XCircle,
+  CheckCircle,
+  Info,
+  ListChecks,
+  Mail,
+} from "lucide-react";
 
 const AppliedContestModal = ({
   setSelectedContest,
@@ -9,151 +17,161 @@ const AppliedContestModal = ({
   refetch,
 }) => {
   const axiosSecure = useAxiosSecure();
-  const handleStatusChange = async (id, status) => {
-    // console.log(id, status); // Good for debugging
 
+  const handleStatusChange = async (id, status) => {
     try {
       const res = await axiosSecure.patch(
         `/applied-contest/${id}?status=${status}`
       );
 
       if (res.data.modifiedCount > 0) {
-        // FIX: Use if/else to prevent double toasts
         if (status === "rejected") {
           toast.error(`The contest has been rejected.`);
         } else {
           toast.success(`The contest has been ${status}.`);
         }
-
-        // Refresh the table data
-       refetch();
-       setSelectedContest(null);
+        refetch();
+        setSelectedContest(null);
       }
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status.");
     }
   };
+
   const handleDeleteContest = async (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: `<span class="text-base-content uppercase font-black">Permanent Delete?</span>`,
+      text: "This action cannot be undone!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      background: "#1e293b",
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#334155",
+      confirmButtonText: "Yes, Delete It",
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await axiosSecure.delete(`/applied-contest/${id}`);
         if (res.data.deletedCount > 0) {
           Swal.fire({
             title: "Deleted!",
-            text: "Your file has been deleted.",
             icon: "success",
+            background: "#1e293b",
+            color: "#fff",
+            showConfirmButton: false,
+            timer: 1500,
           });
-            refetch()
-            setSelectedContest(null)
+          refetch();
+          setSelectedContest(null);
         }
       }
     });
   };
+
   return (
-    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-      {/* Modal Header */}
-      <div className="relative">
+    <div className="bg-base-100 rounded-[2.5rem] border border-base-300 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden relative">
+      {/* Modal Header/Image */}
+      <div className="relative group">
         <img
           src={selectedContest.image}
           alt="cover"
-          className="w-full h-48 object-cover rounded-t-xl"
+          className="w-full h-56 object-cover"
         />
+        <div className="absolute inset-0 bg-linear-to-t from-base-100 via-transparent to-transparent opacity-60"></div>
         <button
           onClick={() => setSelectedContest(null)}
-          className="absolute top-2 right-2 btn btn-circle btn-sm btn-error text-white"
+          className="absolute top-4 right-4 btn btn-circle btn-sm bg-base-100/20 backdrop-blur-md border-none text-white hover:bg-rose-500 transition-all shadow-xl"
         >
           ✕
         </button>
       </div>
 
       {/* Modal Content */}
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-gray-800">
-          {selectedContest.name}
-        </h3>
-        <p className="text-gray-500 text-sm mb-4">
-          Submitted by: {selectedContest.creator}
-        </p>
+      <div className="p-8 -mt-10 relative z-10 bg-base-100 rounded-t-[2.5rem]">
+        <div className="mb-6">
+          <h3 className="text-3xl font-black text-base-content uppercase italic tracking-tighter">
+            {selectedContest.name}
+          </h3>
+          <p className="text-[10px] font-bold opacity-40 uppercase tracking-[0.2em] flex items-center gap-2 mt-2">
+            <Mail size={12} className="text-indigo-500" /> Submitted by:{" "}
+            {selectedContest.creator}
+          </p>
+        </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="p-3 bg-gray-100 rounded-lg">
-            <p className="font-semibold text-gray-700">Contest Description</p>
-            <p className="text-sm text-gray-600 mt-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* Description Block */}
+          <div className="p-5 bg-base-200 rounded-2xl border border-base-300 relative">
+            <div className="flex items-center gap-2 mb-3 text-indigo-500">
+              <Info size={16} />
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                Description
+              </span>
+            </div>
+            <p className="text-xs text-base-content/70 leading-relaxed italic">
               {selectedContest.description}
             </p>
           </div>
-          {/* 1. Use optional chaining (?.) and check if it exists */}
-          {selectedContest?.taskInstruction &&
-            selectedContest.taskInstruction.trim().length > 0 && (
-              <div className="p-3 bg-gray-100 rounded-lg">
-                <p className="font-semibold text-gray-700 mb-2">
-                  Task Instructions
-                </p>
 
-                <ol className="list-decimal list-inside text-sm text-gray-600 space-y-2">
-                  {/* 2. Use || "" to ensure split() always runs on a string */}
-                  {(selectedContest.taskInstruction || "")
-                    .split("\n")
-                    .map((instruction, index) => {
-                      if (!instruction.trim()) return null;
+          {/* Instructions Block */}
+          <div className="p-5 bg-base-200 rounded-2xl border border-base-300 relative">
+            <div className="flex items-center gap-2 mb-3 text-emerald-500">
+              <ListChecks size={16} />
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                Guidelines
+              </span>
+            </div>
 
-                      return (
-                        <li key={index} className="leading-relaxed">
-                          {instruction}
-                        </li>
-                      );
-                    })}
-                </ol>
-              </div>
+            {selectedContest?.taskInstruction ? (
+              <ol className="text-[11px] text-base-content/70 space-y-2 list-none">
+                {(selectedContest.taskInstruction || "")
+                  .split("\n")
+                  .map((instruction, index) => {
+                    if (!instruction.trim()) return null;
+                    return (
+                      <li key={index} className="flex gap-2 leading-relaxed">
+                        <span className="text-emerald-500 font-bold">•</span>
+                        {instruction}
+                      </li>
+                    );
+                  })}
+              </ol>
+            ) : (
+              <p className="text-[11px] opacity-30 italic">
+                No specific instructions provided.
+              </p>
             )}
-
-          {/* 3. Optional: Show a placeholder if empty */}
-          {!selectedContest?.taskInstruction && (
-            <p className="text-gray-400 italic text-sm">
-              No instructions provided for this contest.
-            </p>
-          )}
+          </div>
         </div>
 
-        {/* Action Buttons inside Modal */}
-       
-          <div className="flex justify-end gap-3 mt-6 border-t pt-4">
-            <button
-              onClick={() => handleDeleteContest(selectedContest._id)}
-              className="btn btn-error text-white"
-            >
-              Delete
-            </button>
+        {/* Footer Actions */}
+        <div className="flex flex-wrap justify-between items-center gap-4 pt-6 border-t border-base-300">
+          <button
+            onClick={() => handleDeleteContest(selectedContest._id)}
+            className="btn btn-ghost hover:bg-rose-500/10 text-rose-500 font-black uppercase text-[10px] tracking-widest px-6"
+          >
+            <Trash2 size={16} className="mr-1" /> Remove
+          </button>
+
+          <div className="flex gap-3">
             <button
               onClick={() =>
                 handleStatusChange(selectedContest._id, "rejected")
               }
-              className="btn btn-warning text-white"
+              className="btn bg-base-200 border-base-300 hover:bg-amber-500/10 text-amber-500 hover:text-amber-500 font-black uppercase text-[10px] tracking-widest px-6"
             >
-              Reject Contest
+              <XCircle size={16} className="mr-1" /> Reject
             </button>
+
             <button
               onClick={() =>
                 handleStatusChange(selectedContest._id, "accepted")
               }
-              className="btn inline-flex items-center gap-2 px-4 py-2
-              bg-linear-to-r from-indigo-600 to-purple-600
-              text-white rounded-lg text-sm font-medium
-              hover:shadow-lg transition"
+              className="btn bg-indigo-600 hover:bg-indigo-700 text-white border-none font-black uppercase text-[10px] tracking-widest px-8 shadow-lg shadow-indigo-600/20"
             >
-              Approve Contest
+              <CheckCircle size={16} className="mr-1" /> Approve
             </button>
           </div>
-     
+        </div>
       </div>
     </div>
   );

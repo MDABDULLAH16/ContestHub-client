@@ -29,7 +29,7 @@ import {
   Area,
 } from "recharts";
 
-const AdminDashboard = () => {
+const AdminStats = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
@@ -301,4 +301,4 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
   </div>
 );
 
-export default AdminDashboard;
+export default AdminStats;
