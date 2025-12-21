@@ -113,7 +113,7 @@ console.log(participants);
                   <select
                     className="select select-bordered select-xs"
                     value={p.gradingStatus}
-                    disabled={p.gradingStatus === "Winner"} // Optional: lock if winner
+                    // Optional: lock if winner
                     onChange={(e) => handleGrade(p._id, e.target.value)}
                   >
                     <option value="not_graded">Pending</option>
