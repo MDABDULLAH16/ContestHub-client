@@ -7,7 +7,7 @@ ContestHub is a high-performance platform where UI/UX designers, developers, and
 ---
 
 ### 🌐 Live Preview
-**[View Live Site](https://your-live-site-url.vercel.app)** *(Replace the link above with your actual URL)*
+**[View Live Site](https://contesthub-1cfb1.web.app)**
 
 ---
 
