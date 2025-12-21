@@ -31,14 +31,7 @@ const GoogleSignInButton = () => {
     <div>
       <button
         onClick={handleGoogleSignIn}
-        style={{
-          width: "100%",
-          padding: "10px",
-          background: "red",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-        }}
+        className="btn bg-linear-to-br text-white w-full from-indigo-600 to-purple-600"
       >
         Sign in with Google
       </button>
