@@ -51,7 +51,7 @@ const Banner = () => {
   };
 
   return (
-    <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden bg-black">
+    <div className="relative w-full h-[50vh] md:h-[70vh] overflow-hidden bg-black">
       {/* Swiper Slider Background */}
       <Swiper
         spaceBetween={0}

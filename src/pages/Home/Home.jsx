@@ -6,16 +6,20 @@ import WinnerSection from './WinnerAdvertisement/WinnerAdvertisement';
 import TrustedByCreators from './TrustedByCreators/TrustedByCreators';
 import StatsSection from './HomeStats/HomeStats';
 import PartnerBrands from './PartnerBrands/PartnarBrands';
+import FAQ from './FAQ/FAQ';
+import Newsletter from './Newsletter/Newsletter';
 
 const Home = () => {
     return (
-        <div>
+        <div className='py-6'>
             <Banner />
             <PartnerBrands></PartnerBrands>
             <PopularContests></PopularContests>
             <WinnerSection></WinnerSection>
             <StatsSection/>
-            <TrustedByCreators/>
+            <TrustedByCreators />
+            <Newsletter></Newsletter>
+            <FAQ></FAQ>
            
         </div>
     );
