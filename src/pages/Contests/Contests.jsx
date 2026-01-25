@@ -1,13 +1,15 @@
 import { useState } from "react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { FaFilter, FaSearch, FaTimes } from "react-icons/fa";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Loader from "../../components/Loader/Loader";
 import ContestCard from "./ContestCard";
-import { FaFilter } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Contests = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedType, setSelectedType] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const {
     data: contests = [],
@@ -24,101 +26,135 @@ const Contests = () => {
 
   const contestTypes = ["All", ...new Set(contests.map((c) => c.contestType))];
 
-  const filteredContests =
-    selectedType === "All"
-      ? contests
-      : contests.filter((contest) => contest.contestType === selectedType);
+  // Logic for Combined Filtering (Search + Category)
+  const filteredContests = contests.filter((contest) => {
+    const matchesCategory =
+      selectedType === "All" || contest.contestType === selectedType;
+    const matchesSearch =
+      contest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      contest.contestType.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   if (isLoading) return <Loader />;
 
   if (isError)
     return (
-      <div className="alert alert-error max-w-md mx-auto mt-10 shadow-lg">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="stroke-current shrink-0 h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+      <div className="alert alert-error max-w-md mx-auto mt-10 shadow-lg text-white font-bold">
         <span>Error: {error.message}</span>
       </div>
     );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16 transition-colors duration-500">
+    <div className="max-w-7xl mx-auto px-4 py-14 min-h-screen">
       {/* --- HEADER SECTION --- */}
       <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-black text-base-content mb-4 tracking-tight">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl md:text-5xl font-black text-base-content mb-4"
+        >
           Explore{" "}
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-500 to-purple-600">
+          <span className="bg-linear-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
             Arenas
           </span>
-        </h1>
-        <p className="text-base-content/60 max-w-lg mx-auto text-lg">
-          Filter by category to find your next challenge and win amazing prizes.
-        </p>
+        </motion.h1>
       </div>
 
-      {/* --- FILTER TABS --- */}
-      <div className="flex flex-col items-center mb-16">
-        <div className="flex items-center gap-2 mb-6 text-sm font-bold opacity-40 uppercase tracking-widest">
-          <FaFilter size={12} /> Filter Categories
-        </div>
-        <div className="flex flex-wrap justify-center gap-3 p-2 bg-base-200/50 backdrop-blur-md rounded-4xl border border-base-300 shadow-inner">
-          {contestTypes.map((type) => (
+      {/* --- SEARCH & FILTER CONTROLS --- */}
+      <div className="flex flex-col items-center space-y-8 mb-16">
+        {/* Modern Search Bar */}
+        <div className="relative w-full max-w-2xl group">
+          <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-base-content/40 group-focus-within:text-primary transition-colors">
+            <FaSearch />
+          </div>
+          <input
+            type="text"
+            placeholder="Search for contest name or category..."
+            className="input input-lg w-full pl-14 pr-12 bg-base-200/50 backdrop-blur-md border-base-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-inner"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
             <button
-              key={type}
-              onClick={() => setSelectedType(type)}
-              className={`px-8 py-3 rounded-3xl font-black text-sm transition-all duration-500 ${
-                selectedType === type
-                  ? "bg-linear-to-r from-indigo-500 to-purple-600 text-white shadow-xl shadow-indigo-500/20 scale-105"
-                  : "bg-transparent text-base-content/60 hover:text-indigo-500 hover:bg-base-100"
-              }`}
+              onClick={() => setSearchQuery("")}
+              className="absolute inset-y-0 right-5 flex items-center text-base-content/40 hover:text-error transition-colors"
             >
-              {type}
+              <FaTimes />
             </button>
-          ))}
+          )}
+        </div>
+
+        {/* Category Tabs */}
+        <div className="flex flex-col items-center w-full">
+          <div className="flex items-center gap-2 mb-4 text-xs font-black opacity-40 uppercase tracking-[0.2em]">
+            <FaFilter size={10} /> Jump to Category
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            {contestTypes.map((type) => (
+              <button
+                key={type}
+                onClick={() => setSelectedType(type)}
+                className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 ${
+                  selectedType === type
+                    ? "bg-primary text-primary-content shadow-lg shadow-primary/30 scale-105"
+                    : "bg-base-200 text-base-content/60 hover:bg-base-300"
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* --- GRID / EMPTY STATE --- */}
-      {filteredContests.length === 0 ? (
-        <div className="text-center py-32 bg-base-200/30 rounded-[3rem] border-2 border-dashed border-base-300">
-          <div className="text-6xl mb-6 opacity-20">🔎</div>
-          <h3 className="text-2xl font-black text-base-content opacity-40">
-            No {selectedType !== "All" ? selectedType : ""} contests found
-          </h3>
-          <p className="text-base-content/30 mt-2">
-            Try selecting a different category.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredContests.map((contest) => {
-            const now = new Date();
-            const isLive =
-              now >= new Date(contest.startDate) &&
-              now <= new Date(contest.endDate);
-            const isUpcoming = now < new Date(contest.startDate);
+      <AnimatePresence mode="wait">
+        {filteredContests.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-24 bg-base-200/20 rounded-[3rem] border-2 border-dashed border-base-300"
+          >
+            <div className="text-6xl mb-4">🔎</div>
+            <h3 className="text-xl font-bold opacity-40 uppercase tracking-widest">
+              No results found for "{searchQuery || selectedType}"
+            </h3>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedType("All");
+              }}
+              className="btn btn-ghost btn-sm mt-4 text-primary underline"
+            >
+              Clear all filters
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          >
+            {filteredContests.map((contest) => {
+              const now = new Date();
+              const isLive =
+                now >= new Date(contest.startDate) &&
+                now <= new Date(contest.endDate);
+              const isUpcoming = now < new Date(contest.startDate);
 
-            return (
-              <ContestCard
-                key={contest._id}
-                contest={contest}
-                isLive={isLive}
-                isUpcoming={isUpcoming}
-              />
-            );
-          })}
-        </div>
-      )}
+              return (
+                <motion.div layout key={contest._id}>
+                  <ContestCard
+                    contest={contest}
+                    isLive={isLive}
+                    isUpcoming={isUpcoming}
+                  />
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

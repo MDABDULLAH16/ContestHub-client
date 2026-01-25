@@ -8,15 +8,17 @@ import StatsSection from './HomeStats/HomeStats';
 import PartnerBrands from './PartnerBrands/PartnarBrands';
 import FAQ from './FAQ/FAQ';
 import Newsletter from './Newsletter/Newsletter';
+import Categories from './Categories/Categories';
 
 const Home = () => {
     return (
         <div className='py-6'>
             <Banner />
-            <PartnerBrands></PartnerBrands>
+            <Categories></Categories>
             <PopularContests></PopularContests>
             <WinnerSection></WinnerSection>
             <StatsSection/>
+            <PartnerBrands></PartnerBrands>
             <TrustedByCreators />
             <Newsletter></Newsletter>
             <FAQ></FAQ>
